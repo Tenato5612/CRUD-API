@@ -1,0 +1,34 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package com.crudapi.Controller;
+
+import com.crudapi.dto.AuthenticationDTO;
+import com.crudapi.services.AuthService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+/**
+ *
+ * @author Julie
+ */
+@RestController
+@RequestMapping("/auth")
+@CrossOrigin
+public class AuthController {
+        
+    @Autowired
+    private AuthService authService;
+    
+    @PostMapping(value = "/login")
+    public ResponseEntity<?>login(@RequestBody AuthenticationDTO authDTO){
+        return ResponseEntity.ok(authService.login(authDTO));
+    };
+    
+}
