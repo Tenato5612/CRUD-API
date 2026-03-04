@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.crudapi.Entity;
 
 import jakarta.persistence.Column;
@@ -37,8 +33,6 @@ public class UserEntity {
     private String password;
     
     @Column(nullable = false)
-    private Enum status;
+    private Enum status;    
     
-    @Column(nullable = false)
-    private 
 }
