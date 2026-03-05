@@ -40,7 +40,7 @@ Este projeto utiliza Flyway para gerenciar o esquema do banco de dados.
 ### - Os scripts de migração encontram-se em: `src/main/resources/db/migration`
 ### - Importante: Nunca altere um arquivo SQL já existente. Para novas mudanças, crie um novo arquivo seguindo o padrão de versão `V{número}__{descrição}.sql`.
 
-🛠️ Como Executar 🛠️
+### 🛠️ Como Executar 🛠️
 
 ### 1. Clonar repositório
 git clone https://github.com/Tenato5612/CRUD-API.git
