@@ -26,6 +26,8 @@ public class AuthEntryPoint implements AuthenticationEntryPoint{
         body.put("status", HttpServletResponse.SC_UNAUTHORIZED);
         body.put("Error", "Unauthorized");      
         
+        body.put("Error", "Unauthorized");         
+        //Rever na aula
         final ObjectMapper mapper = new ObjectMapper();
         mapper.writeValue(response.getOutputStream(), body);
     }

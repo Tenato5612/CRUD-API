@@ -15,7 +15,7 @@ import org.springframework.beans.BeanUtils;
 public class UserDTO {
     private Long id;
     private String name;
-    private String senha;
+    private String password;
     private String email;
 
     public UserDTO(UserEntity user){
@@ -38,12 +38,12 @@ public class UserDTO {
         this.name = name;
     }
 
-    public String getSenha() {
-        return senha;
+    public String getPassword() {
+        return password;
     }
 
-    public void setSenha(String senha) {
-        this.senha = senha;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getEmail() {

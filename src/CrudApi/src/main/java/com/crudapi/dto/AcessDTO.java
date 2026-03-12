@@ -12,9 +12,8 @@ public class AcessDTO {
 
     private String token;
 
-    //TODO impl return tge user and unlock (Authorities)
-
-    
+    //TODO impl return the user and unlock (Authorities)
+  
     public AcessDTO(String token) {
         this.token = token;
     }        

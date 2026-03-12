@@ -21,9 +21,21 @@ public class UserService {
     @Autowired PasswordEncoder passwordEncoder;       
     
     // Add User
-    public void insertUser(UserDTO user){
-        UserEntity userEntity = new UserEntity(user);
-        userEntity.setPassword(passwordEncoder.encode(user.getPassword()));
+    public void insertUser(UserDTO userDTO){
+        UserEntity userEntity = new UserEntity();
+        userEntity.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         userRepository.save(userEntity);
     }
+    
+    public UserDTO alterUser(UserDTO userDTO){
+        return null;
+    }
+    
+    public UserDTO readUser(UserDTO userDTO){
+        return null;
+    }
+    
+    public void deleteUser(Long id){
+    
+    }   
 }
