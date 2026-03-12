@@ -1,3 +1,4 @@
+
 package com.crudapi.Entity;
 
 import jakarta.persistence.Column;
@@ -9,41 +10,34 @@ import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "User")
-public class UserEntity {
+@Table(name = "Store")
+public class StoreEntity {
     
-    //Change this status case user confirm email, or 'delete' your account
-    private enum Status{
-        Active, Inactive, Disconect
+    public enum status{
+        Online, Offline
     }
-        
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
     
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+        
     @Column(nullable = false)
     private String name;
     
-    @Column(nullable = false, unique = true)
-    private String email;
-    
     @Column(nullable = false)
-    private String password;
-    
-    @Column(nullable = false, unique = true)
-    private String login;    
+    private String normalizedDomain;
     
     @Column(nullable = false)
     private Enum status;
     
     @Column(nullable = false)
-    private LocalDateTime createAt;
+    private LocalDateTime createAt;                    
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -55,28 +49,12 @@ public class UserEntity {
         this.name = name;
     }
 
-    public String getEmail() {
-        return email;
+    public String getNormalizedDomain() {
+        return normalizedDomain;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
+    public void setNormalizedDomain(String normalizedDomain) {
+        this.normalizedDomain = normalizedDomain;
     }
 
     public Enum getStatus() {
@@ -94,7 +72,6 @@ public class UserEntity {
     public void setCreateAt(LocalDateTime createAt) {
         this.createAt = createAt;
     }
- 
     
     
 }

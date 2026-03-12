@@ -23,7 +23,6 @@ public class ResourceEntity {
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    
     private Long id;    
     
     @Column(nullable = false)    
@@ -37,7 +36,6 @@ public class ResourceEntity {
     }
 
     public ResourceEntity(ResourceEntity resource){
-
         BeanUtils.copyProperties(resource, this);
     }
     
