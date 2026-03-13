@@ -6,6 +6,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 
@@ -21,18 +23,20 @@ public class ScrapEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @OneToMany
+    @JoinColumn
     @Column(nullable = false)
-    private Long id_Product;
-
-    @Column(nullable = false)
-    private Long id_Store;
+    private ProductEntity id_Product;
     
     @Column(nullable = false)
     private Enum status;
     
+    @Column(nullable = false)
+    private String error_Message;
+    
     //Scrap while time
     @Column(nullable = false)
-    private int duration;
+    private int duration;        
     
     @Column(nullable = false)
     private LocalDateTime scrapAt;   
@@ -45,22 +49,14 @@ public class ScrapEntity {
         this.id = id;
     }
 
-    public Long getId_Product() {
+    public ProductEntity getId_Product() {
         return id_Product;
     }
 
-    public void setId_Product(Long id_Product) {
+    public void setId_Product(ProductEntity id_Product) {
         this.id_Product = id_Product;
     }
-
-    public Long getId_Store() {
-        return id_Store;
-    }
-
-    public void setId_Store(Long id_Store) {
-        this.id_Store = id_Store;
-    }
-
+    
     public Enum getStatus() {
         return status;
     }
@@ -68,6 +64,14 @@ public class ScrapEntity {
     public void setStatus(Enum status) {
         this.status = status;
     }
+
+    public String getError_Message() {
+        return error_Message;
+    }
+
+    public void setError_Message(String error_Message) {
+        this.error_Message = error_Message;
+    }        
 
     public int getDuration() {
         return duration;

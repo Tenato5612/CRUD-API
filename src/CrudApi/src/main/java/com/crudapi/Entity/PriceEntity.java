@@ -1,19 +1,14 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.crudapi.Entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import java.time.LocalDateTime;
+import org.hibernate.annotations.ManyToAny;
 
-/**
- *
- * @author Julie
- */
 public class PriceEntity {
     
     public enum Alert{
@@ -24,8 +19,15 @@ public class PriceEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     
+    @ManyToOne
+    @JoinColumn
     @Column(nullable = false)
-    private Long id_Product;
+    private ProductEntity id_Product;
+    
+    @ManyToOne
+    @JoinColumn
+    @Column(nullable = false)
+    private ScrapEntity id_SourceScrap;
     
     @Column(nullable = false)
     private float value;
@@ -34,13 +36,13 @@ public class PriceEntity {
     private float  currency;
     
     @Column(nullable = false)
-    private short iss_Valid;
+    private short is_Valid;
     
     @Column(nullable = false)
     private String error_Message;
     
     @Column(nullable = false)
-    private LocalDateTime colletedAt; 
+    private LocalDateTime colletedAt;             
 
     public Long getId() {
         return id;
@@ -50,13 +52,21 @@ public class PriceEntity {
         this.id = id;
     }
 
-    public Long getId_Product() {
+    public ProductEntity getId_Product() {
         return id_Product;
     }
 
-    public void setId_Product(Long id_Product) {
+    public void setId_Product(ProductEntity id_Product) {
         this.id_Product = id_Product;
     }
+
+    public ScrapEntity getId_SourceScrap() {
+        return id_SourceScrap;
+    }
+
+    public void setId_SourceScrap(ScrapEntity id_SourceScrap) {
+        this.id_SourceScrap = id_SourceScrap;
+    }        
 
     public float getValue() {
         return value;
@@ -74,12 +84,12 @@ public class PriceEntity {
         this.currency = currency;
     }
 
-    public short getIss_Valid() {
-        return iss_Valid;
+    public short getIs_Valid() {
+        return is_Valid;
     }
 
-    public void setIss_Valid(short iss_Valid) {
-        this.iss_Valid = iss_Valid;
+    public void setIs_Valid(short iss_Valid) {
+        this.is_Valid = iss_Valid;
     }
 
     public String getError_Message() {

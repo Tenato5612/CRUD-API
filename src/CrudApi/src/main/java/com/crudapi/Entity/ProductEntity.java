@@ -6,6 +6,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 
@@ -21,22 +25,25 @@ public class ProductEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     
-    @Id
+    @OneToOne
     @Column(nullable = false)
-    private Long id_User;
+    private StoreEntity id_Store;
     
-    @Id
+    @ManyToOne
+    @Column(nullable = false)    
+    @JoinColumn
+    private CategoryEntity id_Category;
+    
+    @OneToMany
     @Column(nullable = false)
-    private Long id_Store;
-        
+    @JoinColumn
+    private UserProductEntity id_UserProduct;    
+    
     @Column(nullable = false)
     private String name;
         
     @Column(nullable = false)
     private String product_Url;
-    
-    @Column(nullable = false)
-    private String normalized_Url;
     
     @Column(nullable = false)
     private float target_Price;
@@ -58,22 +65,30 @@ public class ProductEntity {
         this.id = id;
     }
 
-    public Long getId_User() {
-        return id_User;
-    }
-
-    public void setId_User(Long id_User) {
-        this.id_User = id_User;
-    }
-
-    public Long getId_Store() {
+    public StoreEntity getId_Store() {
         return id_Store;
     }
 
-    public void setId_Store(Long id_Store) {
+    public void setId_Store(StoreEntity id_Store) {
         this.id_Store = id_Store;
     }
 
+    public CategoryEntity getId_Category() {
+        return id_Category;
+    }
+
+    public void setId_Category(CategoryEntity id_Category) {
+        this.id_Category = id_Category;
+    }
+
+    public UserProductEntity getId_UserProduct() {
+        return id_UserProduct;
+    }  
+
+    public void setId_UserProduct(UserProductEntity id_UserProduct) {
+        this.id_UserProduct = id_UserProduct;
+    }
+       
     public String getName() {
         return name;
     }
@@ -88,14 +103,6 @@ public class ProductEntity {
 
     public void setProduct_Url(String product_Url) {
         this.product_Url = product_Url;
-    }
-
-    public String getNormalized_Url() {
-        return normalized_Url;
-    }
-
-    public void setNormalized_Url(String normalized_Url) {
-        this.normalized_Url = normalized_Url;
     }
 
     public float getTarget_Price() {
@@ -128,10 +135,5 @@ public class ProductEntity {
 
     public void setCreateAt(LocalDateTime createAt) {
         this.createAt = createAt;
-    }
-    
-    
-    
-    
-    
+    }            
 }

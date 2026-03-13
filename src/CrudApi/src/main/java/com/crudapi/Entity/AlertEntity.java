@@ -9,6 +9,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 
@@ -24,8 +26,10 @@ public class AlertEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     
+    @ManyToOne
+    @JoinColumn
     @Column(nullable = false)
-    private Long id_Product;
+    private Long id_UserProduct;
     
     @Column(nullable = false)
     private float triggered_price;
@@ -44,12 +48,12 @@ public class AlertEntity {
         this.id = id;
     }
 
-    public Long getId_Product() {
-        return id_Product;
+    public Long getId_UserProduct() {
+        return id_UserProduct;
     }
 
-    public void setId_Product(Long id_Product) {
-        this.id_Product = id_Product;
+    public void setId_UserProduct(Long id_UserProduct) {
+        this.id_UserProduct = id_UserProduct;
     }
 
     public float getTriggered_price() {

@@ -20,6 +20,8 @@ public class UserDTO {
 
     public UserDTO(UserEntity user){
         BeanUtils.copyProperties(user, this);
+        
+        
     }
 
     public Long getId() {

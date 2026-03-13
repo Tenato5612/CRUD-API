@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.crudapi.services;
-
+/**
 import com.crudapi.dto.AcessDTO;
 import com.crudapi.dto.AuthenticationDTO;
 import com.crudapi.security.JwtUtils;
@@ -14,10 +14,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-/**
+
  *
  * @author Julie
- */
+ 
 @Service
 public class AuthService {
    
@@ -57,3 +57,4 @@ public class AuthService {
     
     
 }
+*/
