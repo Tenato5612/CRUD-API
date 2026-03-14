@@ -3,20 +3,19 @@ package com.crudapi.services;
 import com.crudapi.Entity.UserEntity;
 import com.crudapi.Repository.UserRepository;
 import com.crudapi.dto.User.UserCreateDTO;
+import com.crudapi.dto.User.UserResponseDTO;
+import com.crudapi.dto.User.UserUpdateDTO;
 import com.crudapi.dto.UserDTO;
+import java.util.List;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
-public class UserService {
+@Service
+public class UserService {    
     @Autowired
-    private UserCreateDTO userCreateDTO;
-    
-    @Autowired
-    private UserEntity userEntity;
-    
-    @Autowired
-    private UserRepository userRepository;
+    final UserRepository userRepository;
     
     @Autowired 
     private PasswordEncoder passwordEncoder;       
@@ -25,7 +24,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
     
-    public UserEntity createUser(UserCreateDTO dto){
+    public UserDTO createUser(UserCreateDTO dto){
         if(dto == null){
             throw new IllegalArgumentException("UserCreateDTO can't null");                        
         }
@@ -43,31 +42,60 @@ public class UserService {
         }
         
         UserEntity user = dto.toEntity();
-        
-        BeanUtils.copyProperties(dto, user);        
+        user.setName(dto.getName());
+        user.setEmail(dto.getEmail());                
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
-               
-        return userRepository.save(user);
+        
+        userRepository.save(user);
+        
+        return new UserDTO(user);
+        
+    }    
+    
+    public UserDTO alterUser(Long id, UserUpdateDTO dto){             
+        UserEntity user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        BeanUtils.copyProperties(dto, user, "id");   
+        user.setName(dto.getName());
+        user.setEmail(dto.getEmail());
+        
+        userRepository.save(user);
+        
+        return new UserDTO(user);
+    }
+            
+    public UserDTO readUser(long id){                
+        //user.getId();
+        //user.setName(user.getName());
+        //user.setEmail(user.getEmail());        
+        //user.setCreateAt(user.getCreateAt());
+        
+        UserEntity user = userRepository.findById(id).orElseThrow(() -> new 
+            RuntimeException("User not found"));
+        
+        
+       
+        return new UserDTO(user);
     }
     
-    // Add User
-    public void insertUsera(UserDTO userDTO){
-        UserEntity userEntity = new UserEntity();
-        userEntity.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-        userRepository.save(userEntity);
+    public UserDTO findById(Long id, UserResponseDTO dto){
+        UserEntity user = new UserEntity();
+        BeanUtils.copyProperties(dto, user);
+        user.setName(dto.getName());
+        user.setEmail(dto.getEmail());        
+        user.setCreateAt(dto.getCreateAt());
+        
+        userRepository.save(user);
+       
+        return new UserDTO(user);
     }
 
-    
-    
-    public UserDTO alterUser(UserDTO userDTO){
-        return null;
-    }
-    
-    public UserDTO readUser(UserDTO userDTO){
-        return null;
+    public List<UserDTO> findAll(){
+        return userRepository.findAll().stream().map(UserDTO::new).toList();
     }
     
     public void deleteUser(Long id){
-    
+        userRepository.deleteById(id);
     }   
+    
 }

@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.crudapi.dto.User;
 
 import com.crudapi.Entity.UserEntity;
@@ -11,13 +7,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.BeanUtils;
 
-/**
- *
- * @author Julie
- */
 public class UserCreateDTO {
     
-    @Id
     private Long id;
     
     @NotNull
@@ -33,7 +24,7 @@ public class UserCreateDTO {
     
     public UserEntity toEntity(){
         UserEntity user = new UserEntity();
-        BeanUtils.copyProperties(this, user);
+        BeanUtils.copyProperties(this, user, "id");
         return user;
     }
 

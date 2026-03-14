@@ -19,9 +19,7 @@ public class UserDTO {
     private String email;
 
     public UserDTO(UserEntity user){
-        BeanUtils.copyProperties(user, this);
-        
-        
+        BeanUtils.copyProperties(user, this);               
     }
 
     public Long getId() {

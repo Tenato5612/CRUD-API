@@ -1,5 +1,6 @@
 package com.crudapi.security;
 
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +14,9 @@ import static org.springframework.security.config.web.server.ServerHttpSecurity.
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableMethodSecurity
@@ -26,19 +30,43 @@ public class WebSecurityConfig {
     }
             
     @Bean 
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception{
+    public AuthenticationManager authenticationManager
+        (AuthenticationConfiguration authenticationConfiguration) throws Exception{
         return authenticationConfiguration.getAuthenticationManager();
+    }
+    
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource(){
+        CorsConfiguration cors = new CorsConfiguration();
+        
+        cors.setAllowedOrigins(List.of("*"));
+        cors.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+        cors.addAllowedHeader("*");
+        
+        UrlBasedCorsConfigurationSource source = 
+                new UrlBasedCorsConfigurationSource();
+                
+        source.registerCorsConfiguration("/**", cors);
+        
+        return source;
     }
     
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         http.cors(Customizer.withDefaults());
+        /*
         http.csrf(csrf -> csrf.disable())
             .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**").permitAll());
-                                               // .requestMatchers("/user/**").permitAll();
-                                               // .anyRequest().authenticated());
+            .authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**").permitAll())        
+                                               .requestMatchers("/user/**").permitAll()
+                                               .anyRequest().authenticated());
+        */
+        
+        http.csrf(csrf -> csrf.disable()).cors(cors -> {})
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/users/**")
+                        .permitAll().requestMatchers("/autth/**").permitAll()
+                        .anyRequest().authenticated());
         return http.build();
         
     }           

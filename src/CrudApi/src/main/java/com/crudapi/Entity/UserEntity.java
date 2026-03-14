@@ -5,35 +5,38 @@ import com.crudapi.Repository.UserRepository;
 import com.crudapi.dto.User.UserCreateDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import java.time.LocalDateTime;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Entity
-@Table(name = "User")
+@Table(name = "Users")
 public class UserEntity {
-    
-    @Autowired
-    private UserRepository userRepository;
-    
+           
     //Change this status case user confirm email, or 'delete' your account
-    private enum Status{
+    private enum UserStatus{
         Active, Inactive, Disconect
     }
-              
+     
+    @Version
+    private Long version;
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     
     @ManyToOne
-    @JoinColumn
-    @Column(nullable = false)
+    @JoinColumn    
     private UserProductEntity id_UserProduct;
     
     @Column(nullable = false)
@@ -45,26 +48,32 @@ public class UserEntity {
     @Column(nullable = false)
     private String password;
     
-    @Column(nullable = false, unique = true)
     private String login;    
     
-    @Column(nullable = false)
-    private Enum status;
-    
+    @Enumerated(EnumType.STRING)    
+    private UserStatus status;
+      
     @Column(nullable = false)
     private LocalDateTime createAt;
+   
+    @PrePersist
+    public void prePersist(){
+        this.createAt = LocalDateTime.now();
+    }
     
+    /*
     public UserEntity createUser(UserCreateDTO dto){
         UserEntity user = new UserEntity();
         BeanUtils.copyProperties(dto, user);
         return userRepository.save(user);
     }
+    */
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -108,11 +117,11 @@ public class UserEntity {
         this.login = login;
     }
 
-    public Enum getStatus() {
+    public UserStatus getStatus() {
         return status;
     }
 
-    public void setStatus(Enum status) {
+    public void setStatus(UserStatus status) {
         this.status = status;
     }
 

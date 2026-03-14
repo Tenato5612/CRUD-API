@@ -18,13 +18,11 @@ public class UserProductEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     
-    @ManyToOne
-    @Column(nullable = false)
+    @ManyToOne    
     @JoinColumn
     private UserEntity id_User;
     
     @ManyToOne
-    @Column(nullable = false)
     @JoinColumn
     private ProductEntity id_Product;
     

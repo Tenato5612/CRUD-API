@@ -26,16 +26,14 @@ public class ProductEntity {
     private Long id;
     
     @OneToOne
-    @Column(nullable = false)
+    @JoinColumn
     private StoreEntity id_Store;
     
-    @ManyToOne
-    @Column(nullable = false)    
+    @ManyToOne  
     @JoinColumn
     private CategoryEntity id_Category;
     
-    @OneToMany
-    @Column(nullable = false)
+    @ManyToOne    
     @JoinColumn
     private UserProductEntity id_UserProduct;    
     

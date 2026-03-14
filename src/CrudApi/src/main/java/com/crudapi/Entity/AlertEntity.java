@@ -27,9 +27,8 @@ public class AlertEntity {
     private Long id;
     
     @ManyToOne
-    @JoinColumn
-    @Column(nullable = false)
-    private Long id_UserProduct;
+    @JoinColumn    
+    private UserProductEntity id_UserProduct;
     
     @Column(nullable = false)
     private float triggered_price;
@@ -48,11 +47,11 @@ public class AlertEntity {
         this.id = id;
     }
 
-    public Long getId_UserProduct() {
+    public UserProductEntity getId_UserProduct() {
         return id_UserProduct;
     }
 
-    public void setId_UserProduct(Long id_UserProduct) {
+    public void setId_UserProduct(UserProductEntity id_UserProduct) {
         this.id_UserProduct = id_UserProduct;
     }
 
