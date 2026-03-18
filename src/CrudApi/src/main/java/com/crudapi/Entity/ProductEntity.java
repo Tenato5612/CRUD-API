@@ -11,10 +11,11 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "Product")
+@Table(name = "product")
 public class ProductEntity {
         
     public enum Status{
@@ -41,10 +42,10 @@ public class ProductEntity {
     private String name;
         
     @Column(nullable = false)
-    private String product_Url;
+    private String productUrl;
     
     @Column(nullable = false)
-    private float target_Price;
+    private BigDecimal price;
     
     @Column(nullable = false)
     private String img;
@@ -95,20 +96,20 @@ public class ProductEntity {
         this.name = name;
     }
 
-    public String getProduct_Url() {
-        return product_Url;
+    public String getProductUrl() {
+        return productUrl;
     }
 
-    public void setProduct_Url(String product_Url) {
-        this.product_Url = product_Url;
+    public void setProductUrl(String productUrl) {
+        this.productUrl = productUrl;
     }
 
-    public float getTarget_Price() {
-        return target_Price;
+    public BigDecimal getPrice() {
+        return price;
     }
 
-    public void setTarget_Price(float target_Price) {
-        this.target_Price = target_Price;
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 
     public String getImg() {

@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.crudapi.dto.User;
 
 import com.crudapi.Entity.UserEntity;
@@ -10,10 +6,6 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import org.springframework.beans.BeanUtils;
 
-/**
- *
- * @author Julie
- */
 public class UserResponseDTO {
     
     public enum UserStatus{

@@ -6,6 +6,7 @@ import com.crudapi.dto.User.UserResponseDTO;
 import com.crudapi.dto.User.UserUpdateDTO;
 import com.crudapi.dto.UserDTO;
 import com.crudapi.services.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +23,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-//Map HTTP Requests
 @RequestMapping(value = "/users")
-//@Tag(name = "users", description = "Endpoints para gerenciamento de usuários e verificação")
+@Tag(name = "users", description = "Endpoints para gerenciamento de usuários e verificação")
 public class UserController {
     
     @Autowired    
@@ -38,20 +38,20 @@ public class UserController {
     }
             
     @PostMapping
-    public ResponseEntity<UserDTO> createUser(@RequestBody UserCreateDTO dto){
-        UserDTO user = userService.createUser(dto);        
+    public ResponseEntity<UserDTO> create(@RequestBody UserCreateDTO dto){
+        UserDTO user = userService.create(dto);        
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }    
     
     @PutMapping("/{id}")
-    public ResponseEntity<UserDTO> alterUser(@PathVariable Long id, @RequestBody UserUpdateDTO dto){
-        UserDTO user = userService.alterUser(id, dto);
+    public ResponseEntity<UserDTO> alter(@PathVariable Long id, @RequestBody UserUpdateDTO dto){
+        UserDTO user = userService.alter(id, dto);
         return ResponseEntity.ok(user);
     }      
     
     @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> readUser(@PathVariable("id") long id){
-        UserDTO user = userService.readUser(id);
+    public ResponseEntity<UserDTO> read(@PathVariable("id") long id){
+        UserDTO user = userService.read(id);
         return ResponseEntity.ok(user);
     }
     
@@ -59,19 +59,11 @@ public class UserController {
     public ResponseEntity<List<UserDTO>> findById(){
         return ResponseEntity.ok(userService.findAll());
     }
-    /*
-    public UserDTO alter(@RequestBody UserDTO userDTO){
-        return userService.alterUser(userDTO);
-    }   
-    
-    public UserDTO read(@PathVariable UserDTO userDTO){
-        return userService.readUser(userDTO);
-    }
-   
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") Long id){       
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }    
-     */
+     
 }

@@ -1,8 +1,5 @@
 package com.crudapi.Entity;
 
-import ch.qos.logback.core.joran.util.beans.BeanUtil;
-import com.crudapi.Repository.UserRepository;
-import com.crudapi.dto.User.UserCreateDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -16,11 +13,9 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
 import java.time.LocalDateTime;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @Entity
-@Table(name = "Users")
+@Table(name = "users")
 public class UserEntity {
            
     //Change this status case user confirm email, or 'delete' your account
@@ -60,14 +55,6 @@ public class UserEntity {
     public void prePersist(){
         this.createAt = LocalDateTime.now();
     }
-    
-    /*
-    public UserEntity createUser(UserCreateDTO dto){
-        UserEntity user = new UserEntity();
-        BeanUtils.copyProperties(dto, user);
-        return userRepository.save(user);
-    }
-    */
 
     public Long getId() {
         return id;
@@ -131,8 +118,5 @@ public class UserEntity {
 
     public void setCreateAt(LocalDateTime createAt) {
         this.createAt = createAt;
-    }
- 
-    
-    
+    }         
 }

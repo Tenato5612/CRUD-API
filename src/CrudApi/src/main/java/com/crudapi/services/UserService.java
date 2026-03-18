@@ -24,7 +24,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
     
-    public UserDTO createUser(UserCreateDTO dto){
+    public UserDTO create(UserCreateDTO dto){
         if(dto == null){
             throw new IllegalArgumentException("UserCreateDTO can't null");                        
         }
@@ -41,18 +41,15 @@ public class UserService {
             throw new IllegalArgumentException("Password can't null, or blank");
         }
         
-        UserEntity user = dto.toEntity();
-        user.setName(dto.getName());
-        user.setEmail(dto.getEmail());                
+        UserEntity user = dto.toEntity();             
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
         
         userRepository.save(user);
         
-        return new UserDTO(user);
-        
+        return new UserDTO(user);        
     }    
     
-    public UserDTO alterUser(Long id, UserUpdateDTO dto){             
+    public UserDTO alter(Long id, UserUpdateDTO dto){             
         UserEntity user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         BeanUtils.copyProperties(dto, user, "id");   
@@ -64,17 +61,9 @@ public class UserService {
         return new UserDTO(user);
     }
             
-    public UserDTO readUser(long id){                
-        //user.getId();
-        //user.setName(user.getName());
-        //user.setEmail(user.getEmail());        
-        //user.setCreateAt(user.getCreateAt());
-        
+    public UserDTO read(long id){                         
         UserEntity user = userRepository.findById(id).orElseThrow(() -> new 
-            RuntimeException("User not found"));
-        
-        
-       
+            RuntimeException("User not found"));        
         return new UserDTO(user);
     }
     
