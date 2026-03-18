@@ -32,7 +32,7 @@ public class UserEntity {
     
     @ManyToOne
     @JoinColumn    
-    private UserProductEntity id_UserProduct;
+    private UserProductEntity idUserProduct;
     
     @Column(nullable = false)
     private String name;
@@ -64,12 +64,12 @@ public class UserEntity {
         this.id = id;
     }
 
-    public UserProductEntity getId_UserProduct() {
-        return id_UserProduct;
+    public UserProductEntity getIdUserProduct() {
+        return idUserProduct;
     }
 
-    public void setId_UserProduct(UserProductEntity id_UserProduct) {
-        this.id_UserProduct = id_UserProduct;
+    public void setIdUserProduct(UserProductEntity idUserProduct) {
+        this.idUserProduct = idUserProduct;
     }        
 
     public String getName() {

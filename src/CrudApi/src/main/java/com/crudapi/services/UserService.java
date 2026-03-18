@@ -24,23 +24,11 @@ public class UserService {
         this.userRepository = userRepository;
     }
     
-    public UserDTO create(UserCreateDTO dto){
-        if(dto == null){
-            throw new IllegalArgumentException("UserCreateDTO can't null");                        
-        }
-        
-        if(dto.getEmail() == null || dto.getEmail().isBlank()){
-            throw new IllegalArgumentException("Email can't null, or blank");
-        }
-        
+    public UserDTO create(UserCreateDTO dto){        
         if(userRepository.existsByEmail(dto.getEmail())){
             throw new RuntimeException("Email is registered");
         }
-        
-        if(dto.getPassword() == null || dto.getPassword().isBlank()){
-            throw new IllegalArgumentException("Password can't null, or blank");
-        }
-        
+
         UserEntity user = dto.toEntity();             
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
         

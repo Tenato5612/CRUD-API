@@ -6,6 +6,8 @@ import com.crudapi.dto.User.UserResponseDTO;
 import com.crudapi.dto.User.UserUpdateDTO;
 import com.crudapi.dto.UserDTO;
 import com.crudapi.services.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -36,7 +38,7 @@ public class UserController {
     public UserController(UserService userService){
         this.userService = userService;
     }
-            
+    
     @PostMapping
     public ResponseEntity<UserDTO> create(@RequestBody UserCreateDTO dto){
         UserDTO user = userService.create(dto);        
@@ -64,6 +66,5 @@ public class UserController {
     public ResponseEntity<Void> delete(@PathVariable("id") Long id){       
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
-    }    
-     
+    }         
 }

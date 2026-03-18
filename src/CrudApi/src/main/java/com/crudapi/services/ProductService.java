@@ -8,6 +8,7 @@ import com.crudapi.dto.Product.ProductUpdateDTO;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
 public class ProductService {
@@ -21,10 +22,10 @@ public class ProductService {
         this.productRepository = productRepository;
     }        
     
-    public ProductResponseDTO create(ProductCreateDTO dto){
+    public ProductResponseDTO create(ProductCreateDTO dto){                               
         ProductEntity entity = dto.toEntity();                        
         
-        productRepository.save(entity);
+        productRepository.save(entity);           
         
         return new ProductResponseDTO(entity);
     }
@@ -35,6 +36,7 @@ public class ProductService {
         entity.setName(dto.getName());
         entity.setProductUrl(dto.getProductUrl());
         entity.setImg(dto.getImg());
+        entity.setPrice(dto.getPrice());
         
         productRepository.save(entity);
         
@@ -48,12 +50,12 @@ public class ProductService {
         return new ProductResponseDTO(entity);
     }
     
-    public ProductResponseDTO findById(Long id, ProductResponseDTO dto){
+    public ProductResponseDTO findById(ProductResponseDTO dto){
         ProductEntity entity = new ProductEntity();
         entity.setName(dto.getName());
         entity.setPrice(dto.getPrice());
-        entity.setStatus(dto.getStatus());
-        entity.setCreateAt(dto.getCreate_At());
+        entity.setStatus(ProductEntity.Status.Active);
+        entity.setCreateAt(dto.getCreateAt());
         productRepository.save(entity);
         
         return new ProductResponseDTO(entity);

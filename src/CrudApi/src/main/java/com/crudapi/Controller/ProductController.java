@@ -4,10 +4,14 @@ import com.crudapi.dto.Product.ProductCreateDTO;
 import com.crudapi.dto.Product.ProductResponseDTO;
 import com.crudapi.dto.Product.ProductUpdateDTO;
 import com.crudapi.services.ProductService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,13 +31,17 @@ public class ProductController {
     @Autowired
     private ProductService productService;
     
+    
+    @Operation(summary = "Register new Product")
+    @ApiResponse(responseCode = "201")
     @PostMapping
-    public ResponseEntity<ProductResponseDTO> create(@RequestBody @Valid ProductCreateDTO dto){
-        return ResponseEntity.ok(productService.create(dto));
+    public ResponseEntity<ProductResponseDTO> create(@RequestBody ProductCreateDTO dto){
+        ProductResponseDTO responseDTO = productService.create(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
     
     @PutMapping("/{id}")
-    public ResponseEntity<ProductResponseDTO> updaate(@PathVariable Long id, @RequestBody @Valid ProductUpdateDTO dto){
+    public ResponseEntity<ProductResponseDTO> updaate(@PathVariable Long id, @RequestBody @Valid ProductUpdateDTO dto){        
         return ResponseEntity.ok(productService.update(id, dto));
     }
     
@@ -52,8 +60,5 @@ public class ProductController {
     public ResponseEntity<Void> delete(@PathVariable("id") Long id){       
         productService.delete(id);
         return ResponseEntity.noContent().build();
-    } 
-    
-    
-    
+    }             
 }

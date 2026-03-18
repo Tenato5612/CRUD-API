@@ -1,14 +1,27 @@
 package com.crudapi.dto.Product;
 
 import com.crudapi.Entity.ProductEntity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.xml.bind.annotation.XmlElement;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import org.springframework.beans.BeanUtils;
 
 public class ProductResponseDTO {
     
+    public enum Status{
+        Active, Disable       
+    }
+    
+    @Id
+    @NotNull   
+    private Long id;
+        
     @NotBlank(message = "Invalid name format")
     private String name;
     
@@ -18,23 +31,59 @@ public class ProductResponseDTO {
     @NotNull(message = "Invalid price format")
     private BigDecimal price;
     
-    @NotNull(message = "Invalid status format")
-    private Enum status;
+    private String img;
+    
+    @Enumerated(EnumType.STRING)
+    private Status status;
     
     @NotNull(message = "Invalid date format")
-    private LocalDateTime create_At;
+    private LocalDateTime createAt;
     
-    public ProductEntity toEntity(){
+    public ProductEntity toEntity(){        
         ProductEntity entity = new ProductEntity();
-        BeanUtils.copyProperties(this, entity);
+        this.id = entity.getId();
+        this.name = entity.getName();
+        this.productUrl = entity.getProductUrl();
+        this.price = entity.getPrice();
+        this.img = entity.getImg();
+        //this.status = getStatus();
+        this.createAt = entity.getCreateAt();
         return entity;
     }
     
-    public ProductResponseDTO(ProductEntity dto){
-        
+    public ProductResponseDTO (ProductEntity entity){   
+        this.id = entity.getId();
+        this.name = entity.getName();
+        this.productUrl = entity.getProductUrl();
+        this.price = entity.getPrice();
+        this.img = entity.getImg();
+        //this.status = entity.getStatus();
+        this.createAt = entity.getCreateAt();
     }
-    
-    
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
+    }
+
+    public LocalDateTime getCreateAt() {
+        return createAt;
+    }
+
+    public void setCreateAt(LocalDateTime createAt) {
+        this.createAt = createAt;
+    }        
 
     public String getName() {
         return name;
@@ -60,21 +109,27 @@ public class ProductResponseDTO {
         this.price = price;
     }
 
-    public Enum getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(Enum status) {
+    public void setStatus(Status status) {
         this.status = status;
-    }
-
-    public LocalDateTime getCreate_At() {
-        return create_At;
-    }
-
-    public void setCreate_At(LocalDateTime create_At) {
-        this.create_At = create_At;
-    }
+    }   
     
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ProductResponseDTO other = (ProductResponseDTO) obj;
+        return Objects.equals(this.id, other.id);
+    }
     
 }

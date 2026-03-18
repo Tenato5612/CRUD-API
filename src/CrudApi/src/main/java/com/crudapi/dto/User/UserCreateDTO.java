@@ -11,20 +11,19 @@ public class UserCreateDTO {
     
     private Long id;
     
-    @NotNull
+    @NotBlank
     private String name;    
     
     @Email
-    @NotNull       
+    @NotBlank  
     private String email;
-    
-    @NotNull
+        
     @NotBlank
     private String password;
     
     public UserEntity toEntity(){
         UserEntity user = new UserEntity();
-        BeanUtils.copyProperties(this, user, "id");
+        BeanUtils.copyProperties(this, user, "id");                       
         return user;
     }
 

@@ -3,6 +3,8 @@ package com.crudapi.Entity;
 import jakarta.annotation.Generated;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -10,6 +12,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -28,15 +31,15 @@ public class ProductEntity {
     
     @OneToOne
     @JoinColumn
-    private StoreEntity id_Store;
+    private StoreEntity idStore;
     
     @ManyToOne  
     @JoinColumn
-    private CategoryEntity id_Category;
+    private CategoryEntity idCategory;
     
     @ManyToOne    
     @JoinColumn
-    private UserProductEntity id_UserProduct;    
+    private UserProductEntity idUserProduct;    
     
     @Column(nullable = false)
     private String name;
@@ -50,12 +53,17 @@ public class ProductEntity {
     @Column(nullable = false)
     private String img;
     
-    @Column(nullable = false)
-    private Enum status;
+    @Enumerated(EnumType.STRING)
+    private Status status;
     
     @Column(nullable = false)
     private LocalDateTime createAt;
 
+    @PrePersist
+    public void prePersist(){
+        this.createAt = LocalDateTime.now();
+    }
+    
     public Long getId() {
         return id;
     }
@@ -64,28 +72,28 @@ public class ProductEntity {
         this.id = id;
     }
 
-    public StoreEntity getId_Store() {
-        return id_Store;
+    public StoreEntity getIdStore() {
+        return idStore;
     }
 
-    public void setId_Store(StoreEntity id_Store) {
-        this.id_Store = id_Store;
+    public void setId_Store(StoreEntity idStore) {
+        this.idStore = idStore;
     }
 
-    public CategoryEntity getId_Category() {
-        return id_Category;
+    public CategoryEntity getIdCategory() {
+        return idCategory;
     }
 
-    public void setId_Category(CategoryEntity id_Category) {
-        this.id_Category = id_Category;
+    public void setIdCategory(CategoryEntity idCategory) {
+        this.idCategory = idCategory;
     }
 
-    public UserProductEntity getId_UserProduct() {
-        return id_UserProduct;
+    public UserProductEntity getIdUserProduct() {
+        return idUserProduct;
     }  
 
-    public void setId_UserProduct(UserProductEntity id_UserProduct) {
-        this.id_UserProduct = id_UserProduct;
+    public void setIdUserProduct(UserProductEntity idUserProduct) {
+        this.idUserProduct = idUserProduct;
     }
        
     public String getName() {
@@ -120,13 +128,13 @@ public class ProductEntity {
         this.img = img;
     }
 
-    public Enum getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(Enum status) {
+    public void setStatus(Status status) {
         this.status = status;
-    }
+    }  
 
     public LocalDateTime getCreateAt() {
         return createAt;

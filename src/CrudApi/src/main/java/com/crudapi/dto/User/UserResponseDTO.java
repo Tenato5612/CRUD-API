@@ -1,9 +1,14 @@
 package com.crudapi.dto.User;
 
 import com.crudapi.Entity.UserEntity;
+import com.crudapi.dto.Product.ProductResponseDTO;
+import com.crudapi.dto.UserDTO;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import org.springframework.beans.BeanUtils;
 
 public class UserResponseDTO {
@@ -12,11 +17,11 @@ public class UserResponseDTO {
         Active, Inactive, Disconect
     }
     
-    @NotNull
+    @NotBlank
     private String name;
     
     @Email
-    @NotNull
+    @NotBlank
     private String email;
     
     @NotNull
@@ -29,7 +34,7 @@ public class UserResponseDTO {
         UserEntity user = new UserEntity();
         BeanUtils.copyProperties(this, user);
         return user;
-    }
+    }      
 
     public String getName() {
         return name;
@@ -62,8 +67,5 @@ public class UserResponseDTO {
 
     public void setCreateAt(LocalDateTime createAt) {
         this.createAt = createAt;
-    }
-
-    
-    
+    }        
 }

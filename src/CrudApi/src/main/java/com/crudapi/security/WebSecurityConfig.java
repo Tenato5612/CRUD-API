@@ -64,10 +64,9 @@ public class WebSecurityConfig {
         */
         
         http.csrf(csrf -> csrf.disable()).cors(cors -> {})
-                .authorizeHttpRequests(auth -> auth.requestMatchers("/users/**")
-                        .permitAll().requestMatchers("/autth/**").permitAll()
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/product/**")
+                        .permitAll().requestMatchers("/auth/**").permitAll()
                         .anyRequest().authenticated());
-        return http.build();
-        
+        return http.build();                        
     }           
 }

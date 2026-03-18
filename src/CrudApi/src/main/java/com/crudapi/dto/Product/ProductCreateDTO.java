@@ -8,7 +8,7 @@ import org.springframework.beans.BeanUtils;
 
 public class ProductCreateDTO {
       
-    @NotNull(message = "Cannot name be null or blank")
+    @NotBlank(message = "Cannot name be null or blank")
     private String name;
     
     @NotBlank(message = "Invalid URL format")
@@ -40,7 +40,7 @@ public class ProductCreateDTO {
         return productUrl;
     }
 
-    public void setProduct_Url(String productUrl) {
+    public void setProductUrl(String productUrl) {
         this.productUrl = productUrl;
     }
 
@@ -58,7 +58,5 @@ public class ProductCreateDTO {
 
     public void setImg(String img) {
         this.img = img;
-    }
-    
-    
+    }        
 }
