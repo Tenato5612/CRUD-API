@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 public class UserEntity {
            
     //Change this status case user confirm email, or 'delete' your account
-    private enum UserStatus{
+    public enum Status{
         Active, Inactive, Disconect
     }
      
@@ -45,8 +45,9 @@ public class UserEntity {
     
     private String login;    
     
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)    
-    private UserStatus status;
+    private Status status;
       
     @Column(nullable = false)
     private LocalDateTime createAt;
@@ -104,11 +105,11 @@ public class UserEntity {
         this.login = login;
     }
 
-    public UserStatus getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(UserStatus status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 

@@ -1,16 +1,16 @@
 package com.crudapi.dto.Product;
 
 import com.crudapi.Entity.ProductEntity;
+import com.crudapi.Entity.ProductEntity.Category;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.xml.bind.annotation.XmlElement;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.Objects;
-import org.springframework.beans.BeanUtils;
 
 public class ProductResponseDTO {
     
@@ -29,9 +29,12 @@ public class ProductResponseDTO {
     private String productUrl;
     
     @NotNull(message = "Invalid price format")
-    private BigDecimal price;
+    private BigDecimal price;        
     
     private String img;
+    
+    @Enumerated(EnumType.STRING)
+    private Category category;
     
     @Enumerated(EnumType.STRING)
     private Status status;
@@ -44,10 +47,10 @@ public class ProductResponseDTO {
         this.id = entity.getId();
         this.name = entity.getName();
         this.productUrl = entity.getProductUrl();
-        this.price = entity.getPrice();
-        this.img = entity.getImg();
-        //this.status = getStatus();
+        this.price = entity.getPrice();                
+        this.img = entity.getImg();              
         this.createAt = entity.getCreateAt();
+        this.category = entity.getCategory();
         return entity;
     }
     
@@ -55,12 +58,30 @@ public class ProductResponseDTO {
         this.id = entity.getId();
         this.name = entity.getName();
         this.productUrl = entity.getProductUrl();
-        this.price = entity.getPrice();
+        this.price = entity.getPrice();      
+        cents();
         this.img = entity.getImg();
-        //this.status = entity.getStatus();
-        this.createAt = entity.getCreateAt();
+        haveProduct();        
+        this.createAt = entity.getCreateAt();           
+        this.category = entity.getCategory();
     }
-
+    
+    //Verify if the product have available and set your status
+    public void haveProduct(){
+        if(price == null || price.compareTo(BigDecimal.ZERO) == 0){
+            this.status = Status.Disable;
+        } else{
+            this.status = Status.Active;
+        }                            
+    }
+    
+    //Format price for have 2 digits values
+    public BigDecimal cents(){
+        BigDecimal priceFormat = this.price.setScale(2, RoundingMode.HALF_UP);        
+        return priceFormat;
+        
+    }
+    
     public Long getId() {
         return id;
     }
@@ -107,7 +128,7 @@ public class ProductResponseDTO {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
-    }
+    }   
 
     public Status getStatus() {
         return status;
@@ -116,6 +137,14 @@ public class ProductResponseDTO {
     public void setStatus(Status status) {
         this.status = status;
     }   
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }        
     
     @Override
     public boolean equals(Object obj) {
@@ -130,6 +159,13 @@ public class ProductResponseDTO {
         }
         final ProductResponseDTO other = (ProductResponseDTO) obj;
         return Objects.equals(this.id, other.id);
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 59 * hash + Objects.hashCode(this.id);
+        return hash;
     }
     
 }

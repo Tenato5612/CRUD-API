@@ -1,14 +1,16 @@
 package com.crudapi.dto.User;
 
 import com.crudapi.Entity.UserEntity;
+import com.crudapi.Entity.UserEntity.Status;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import org.springframework.beans.BeanUtils;
 
 public class UserCreateDTO {
     
+    @Id
     private Long id;
     
     @NotBlank
@@ -16,15 +18,22 @@ public class UserCreateDTO {
     
     @Email
     @NotBlank  
-    private String email;
-        
+    private String email;            
+    
     @NotBlank
-    private String password;
+    private String password;  
+    
+    @Enumerated(EnumType.STRING)
+    private Status status = Status.Inactive;
     
     public UserEntity toEntity(){
-        UserEntity user = new UserEntity();
-        BeanUtils.copyProperties(this, user, "id");                       
-        return user;
+        UserEntity entity = new UserEntity();                        
+        entity.setId(this.id);
+        entity.setName(this.name);
+        entity.setEmail(this.email);        
+        entity.setPassword(this.password);
+        entity.setStatus(this.status);
+        return entity;
     }
 
     public Long getId() {
@@ -58,7 +67,12 @@ public class UserCreateDTO {
     public void setPassword(String password) {
         this.password = password;
     }
-           
-    
-    
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }        
 }

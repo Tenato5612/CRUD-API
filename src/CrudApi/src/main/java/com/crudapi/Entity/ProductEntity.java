@@ -1,6 +1,5 @@
 package com.crudapi.Entity;
 
-import jakarta.annotation.Generated;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -10,7 +9,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
@@ -25,6 +23,14 @@ public class ProductEntity {
         Active, Disable
     }
     
+    public enum Category{
+        Default,
+        Eletronic,
+        Clothes,
+        Toys,
+        Food
+    }        
+    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -32,11 +38,7 @@ public class ProductEntity {
     @OneToOne
     @JoinColumn
     private StoreEntity idStore;
-    
-    @ManyToOne  
-    @JoinColumn
-    private CategoryEntity idCategory;
-    
+
     @ManyToOne    
     @JoinColumn
     private UserProductEntity idUserProduct;    
@@ -48,16 +50,21 @@ public class ProductEntity {
     private String productUrl;
     
     @Column(nullable = false)
-    private BigDecimal price;
+    private BigDecimal price;    
     
     @Column(nullable = false)
     private String img;
     
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Category category;   
+    
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Status status;
     
     @Column(nullable = false)
-    private LocalDateTime createAt;
+    private LocalDateTime createAt;             
 
     @PrePersist
     public void prePersist(){
@@ -78,14 +85,6 @@ public class ProductEntity {
 
     public void setId_Store(StoreEntity idStore) {
         this.idStore = idStore;
-    }
-
-    public CategoryEntity getIdCategory() {
-        return idCategory;
-    }
-
-    public void setIdCategory(CategoryEntity idCategory) {
-        this.idCategory = idCategory;
     }
 
     public UserProductEntity getIdUserProduct() {
@@ -119,7 +118,7 @@ public class ProductEntity {
     public void setPrice(BigDecimal price) {
         this.price = price;
     }
-
+    
     public String getImg() {
         return img;
     }
@@ -142,5 +141,13 @@ public class ProductEntity {
 
     public void setCreateAt(LocalDateTime createAt) {
         this.createAt = createAt;
-    }            
+    }           
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }     
 }

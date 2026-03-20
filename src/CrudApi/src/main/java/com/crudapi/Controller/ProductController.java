@@ -11,7 +11,6 @@ import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -31,24 +29,28 @@ public class ProductController {
     @Autowired
     private ProductService productService;
     
-    
     @Operation(summary = "Register new Product")
     @ApiResponse(responseCode = "201")
     @PostMapping
     public ResponseEntity<ProductResponseDTO> create(@RequestBody ProductCreateDTO dto){
-        ProductResponseDTO responseDTO = productService.create(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
+        ProductResponseDTO responseDTO = productService.create(dto);        
+        if(responseDTO.getProductUrl().equals("") || responseDTO.getProductUrl() == null){                        
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseDTO);                
+        } else{
+            return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
+        }
+        
     }
     
     @PutMapping("/{id}")
-    public ResponseEntity<ProductResponseDTO> updaate(@PathVariable Long id, @RequestBody @Valid ProductUpdateDTO dto){        
+    public ResponseEntity<ProductResponseDTO> update(@PathVariable Long id, @RequestBody @Valid ProductUpdateDTO dto){        
         return ResponseEntity.ok(productService.update(id, dto));
     }
     
     @GetMapping("/{id}")
     public ResponseEntity<ProductResponseDTO> read(@PathVariable("id") long id){
-        ProductResponseDTO user = productService.read(id);
-        return ResponseEntity.ok(user);
+        ProductResponseDTO responseDTO = productService.read(id);
+        return ResponseEntity.ok(responseDTO);
     }
     
     @GetMapping

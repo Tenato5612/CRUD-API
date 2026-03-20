@@ -1,21 +1,21 @@
 package com.crudapi.dto.User;
 
 import com.crudapi.Entity.UserEntity;
-import com.crudapi.dto.Product.ProductResponseDTO;
-import com.crudapi.dto.UserDTO;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.Objects;
-import org.springframework.beans.BeanUtils;
 
 public class UserResponseDTO {
     
     public enum UserStatus{
         Active, Inactive, Disconect
     }
+    
+    @Id
+    private Long id;
     
     @NotBlank
     private String name;
@@ -31,10 +31,30 @@ public class UserResponseDTO {
     private LocalDateTime createAt;           
 
     public UserEntity toEntity(){
-        UserEntity user = new UserEntity();
-        BeanUtils.copyProperties(this, user);
-        return user;
+        UserEntity entity = new UserEntity();                
+        this.id = entity.getId();
+        this.name = entity.getName();
+        this.email = entity.getEmail();
+        this.status = status.Active;
+        this.createAt = entity.getCreateAt();                               
+        return entity;
     }      
+    
+    public UserResponseDTO(UserEntity entity){
+        this.id = entity.getId();
+        this.name = entity.getName();
+        this.email = entity.getEmail();
+        this.status = status.Active;
+        this.createAt = entity.getCreateAt();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }        
 
     public String getName() {
         return name;
@@ -68,4 +88,26 @@ public class UserResponseDTO {
     public void setCreateAt(LocalDateTime createAt) {
         this.createAt = createAt;
     }        
+    
+        @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 71 * hash + Objects.hashCode(this.id);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final UserResponseDTO other = (UserResponseDTO) obj;
+        return Objects.equals(this.id, other.id);
+    }
 }

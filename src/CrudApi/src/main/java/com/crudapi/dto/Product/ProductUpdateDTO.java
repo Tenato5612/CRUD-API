@@ -1,9 +1,11 @@
 package com.crudapi.dto.Product;
 
 import com.crudapi.Entity.ProductEntity;
+import com.crudapi.Entity.ProductEntity.Category;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
-import org.springframework.beans.BeanUtils;
 
 public class ProductUpdateDTO {
     
@@ -16,18 +18,18 @@ public class ProductUpdateDTO {
     @NotNull
     private BigDecimal price;
     
-    private String img;            
+    private String img;             
+    
+    @Enumerated(EnumType.STRING)
+    private Category category;
     
     public ProductEntity toEntity(){
         ProductEntity entity = new ProductEntity();
-        entity.setName(this.name);
-        entity.setProductUrl(this.productUrl);
-        entity.setImg(this.img);
         this.price = entity.getPrice();
         this.name = entity.getName();
         this.productUrl = entity.getProductUrl();
-        this.img = entity.getImg();
-        
+        this.img = entity.getImg();        
+        this.category = entity.getCategory();
         
         return entity;
     }
@@ -62,5 +64,13 @@ public class ProductUpdateDTO {
 
     public void setImg(String img) {
         this.img = img;
-    }           
+    }   
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }    
 }

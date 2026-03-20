@@ -5,7 +5,6 @@ import com.crudapi.Repository.UserRepository;
 import com.crudapi.dto.User.UserCreateDTO;
 import com.crudapi.dto.User.UserResponseDTO;
 import com.crudapi.dto.User.UserUpdateDTO;
-import com.crudapi.dto.UserDTO;
 import java.util.List;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,51 +23,52 @@ public class UserService {
         this.userRepository = userRepository;
     }
     
-    public UserDTO create(UserCreateDTO dto){        
+    public UserResponseDTO create(UserCreateDTO dto){      
+        
+        
         if(userRepository.existsByEmail(dto.getEmail())){
             throw new RuntimeException("Email is registered");
         }
 
-        UserEntity user = dto.toEntity();             
-        user.setPassword(passwordEncoder.encode(dto.getPassword()));
+        UserEntity entity = dto.toEntity();             
+        entity.setPassword(passwordEncoder.encode(dto.getPassword()));
         
-        userRepository.save(user);
+        userRepository.save(entity);
         
-        return new UserDTO(user);        
+        return new UserResponseDTO(entity);        
     }    
     
-    public UserDTO alter(Long id, UserUpdateDTO dto){             
-        UserEntity user = userRepository.findById(id)
+    public UserResponseDTO alter(Long id, UserUpdateDTO dto){             
+        UserEntity entity = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-        BeanUtils.copyProperties(dto, user, "id");   
-        user.setName(dto.getName());
-        user.setEmail(dto.getEmail());
+        BeanUtils.copyProperties(dto, entity, "id");   
+        entity.setName(dto.getName());
+        entity.setEmail(dto.getEmail());
         
-        userRepository.save(user);
+        userRepository.save(entity);
         
-        return new UserDTO(user);
+        return new UserResponseDTO(entity);
     }
             
-    public UserDTO read(long id){                         
+    public UserResponseDTO read(long id){                         
         UserEntity user = userRepository.findById(id).orElseThrow(() -> new 
             RuntimeException("User not found"));        
-        return new UserDTO(user);
+        return new UserResponseDTO(user);
     }
     
-    public UserDTO findById(Long id, UserResponseDTO dto){
-        UserEntity user = new UserEntity();
-        BeanUtils.copyProperties(dto, user);
-        user.setName(dto.getName());
-        user.setEmail(dto.getEmail());        
-        user.setCreateAt(dto.getCreateAt());
+    public UserResponseDTO findById(Long id, UserResponseDTO dto){
+        UserEntity entity = new UserEntity();        
+        entity.setName(dto.getName());
+        entity.setEmail(dto.getEmail());        
+        entity.setCreateAt(dto.getCreateAt());
         
-        userRepository.save(user);
+        userRepository.save(entity);
        
-        return new UserDTO(user);
+        return new UserResponseDTO(entity);
     }
 
-    public List<UserDTO> findAll(){
-        return userRepository.findAll().stream().map(UserDTO::new).toList();
+    public List<UserResponseDTO> findAll(){
+        return userRepository.findAll().stream().map(UserResponseDTO::new).toList();
     }
     
     public void deleteUser(Long id){

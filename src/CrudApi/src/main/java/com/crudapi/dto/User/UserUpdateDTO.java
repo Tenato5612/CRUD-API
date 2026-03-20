@@ -1,27 +1,34 @@
 package com.crudapi.dto.User;
 
 import com.crudapi.Entity.UserEntity;
+import com.crudapi.Entity.UserEntity.Status;
 import jakarta.persistence.Column;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import org.springframework.beans.BeanUtils;
 
 public class UserUpdateDTO {
     
+    @Id
     private Long id;
     
     @NotNull
     private String name;
     
     @Email
-    @NotNull
+    @NotBlank
     private String email;    
+        
+    private Status status;
     
     public UserEntity toEntity(){        
-        UserEntity user = new UserEntity();
-        BeanUtils.copyProperties(user, this);
-        return user;
+        UserEntity entity = new UserEntity();
+        this.id = entity.getId();
+        this.name = entity.getName();
+        this.email = entity.getEmail();
+        this.status = entity.getStatus();     
+        return entity;
     }
 
     public Long getId() {
@@ -47,6 +54,12 @@ public class UserUpdateDTO {
     public void setEmail(String email) {
         this.email = email;
     }
-    
-    
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }        
 }
