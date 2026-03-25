@@ -13,7 +13,7 @@ public class ProductCreateDTO {
     @NotBlank(message = "Cannot name be null or blank")
     private String name;
     
-    @NotBlank(message = "Invalid URL format")
+    @NotBlank(message = "Cannot URL be null or blank")
     private String productUrl;
     
     @NotNull(message = "Invalid price format")

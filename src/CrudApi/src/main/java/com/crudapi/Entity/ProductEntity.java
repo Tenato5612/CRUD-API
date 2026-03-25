@@ -58,8 +58,7 @@ public class ProductEntity {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Category category;   
-    
-    @Column(nullable = false)
+        
     @Enumerated(EnumType.STRING)
     private Status status;
     

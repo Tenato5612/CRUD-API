@@ -11,7 +11,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
-import jakarta.persistence.Version;
 import java.time.LocalDateTime;
 
 @Entity
@@ -21,10 +20,7 @@ public class UserEntity {
     //Change this status case user confirm email, or 'delete' your account
     public enum Status{
         Active, Inactive, Disconect
-    }
-     
-    @Version
-    private Long version;
+    }     
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,9 +37,7 @@ public class UserEntity {
     private String email;
      
     @Column(nullable = false)
-    private String password;
-    
-    private String login;    
+    private String password;   
     
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)    
@@ -95,14 +89,6 @@ public class UserEntity {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
     }
 
     public Status getStatus() {

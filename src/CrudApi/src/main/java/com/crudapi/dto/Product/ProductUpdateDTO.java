@@ -15,7 +15,7 @@ public class ProductUpdateDTO {
     @NotNull
     private String productUrl;
     
-    @NotNull
+    @NotNull(message = "")
     private BigDecimal price;
     
     private String img;             

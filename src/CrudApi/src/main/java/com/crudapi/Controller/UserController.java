@@ -32,7 +32,7 @@ public class UserController {
         this.userService = userService;
     }
             
-    @Operation(summary = "Register new Product")
+    @Operation(summary = "Register new User")
     @ApiResponse(responseCode = "201")    
     @PostMapping
     public ResponseEntity<UserResponseDTO> create(@RequestBody UserCreateDTO dto){
@@ -46,8 +46,8 @@ public class UserController {
     }    
     
     @PutMapping("/{id}")
-    public ResponseEntity<UserResponseDTO> alter(@PathVariable Long id, @RequestBody UserUpdateDTO dto){
-        UserResponseDTO responseDTO = userService.alter(id, dto);
+    public ResponseEntity<UserResponseDTO> update(@PathVariable Long id, @RequestBody UserUpdateDTO dto){
+        UserResponseDTO responseDTO = userService.update(id, dto);
         return ResponseEntity.ok(responseDTO);
     }      
     

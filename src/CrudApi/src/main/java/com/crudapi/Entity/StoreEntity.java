@@ -3,6 +3,8 @@ package com.crudapi.Entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -13,7 +15,7 @@ import java.time.LocalDateTime;
 @Table(name = "Store")
 public class StoreEntity {
     
-    public enum status{
+    public enum Status{
         Online, Offline
     }
     
@@ -25,13 +27,19 @@ public class StoreEntity {
     private String name;
     
     @Column(nullable = false)
-    private String normalizedDomain;
+    private String domain;
     
     @Column(nullable = false)
-    private Enum status;
+    private String baseUrl;
+    
+    @Enumerated(EnumType.STRING)
+    private Status status;
     
     @Column(nullable = false)
-    private LocalDateTime createAt;                    
+    private LocalDateTime createAt;   
+    
+    @Column(nullable = false)
+    private String siteUrl;
 
     public Long getId() {
         return id;
@@ -49,19 +57,19 @@ public class StoreEntity {
         this.name = name;
     }
 
-    public String getNormalizedDomain() {
-        return normalizedDomain;
+    public String getDomain() {
+        return domain;
     }
 
-    public void setNormalizedDomain(String normalizedDomain) {
-        this.normalizedDomain = normalizedDomain;
+    public void setDomain(String domain) {
+        this.domain = domain;
     }
 
-    public Enum getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(Enum status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
@@ -72,6 +80,20 @@ public class StoreEntity {
     public void setCreateAt(LocalDateTime createAt) {
         this.createAt = createAt;
     }
-    
-    
+
+    public String getBaseUrl() {
+        return baseUrl;
+    }
+
+    public void setBaseUrl(String baseUrl) {
+        this.baseUrl = baseUrl;
+    }        
+
+    public String getSiteUrl() {
+        return siteUrl;
+    }
+
+    public void setSiteUrl(String siteUrl) {
+        this.siteUrl = siteUrl;
+    }        
 }

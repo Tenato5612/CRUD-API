@@ -38,17 +38,16 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseDTO);                
         } else{
             return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
-        }
-        
+        }        
     }
     
     @PutMapping("/{id}")
-    public ResponseEntity<ProductResponseDTO> update(@PathVariable Long id, @RequestBody @Valid ProductUpdateDTO dto){        
+    public ResponseEntity<ProductResponseDTO> update(@PathVariable("id") Long id, @RequestBody @Valid ProductUpdateDTO dto){        
         return ResponseEntity.ok(productService.update(id, dto));
     }
     
     @GetMapping("/{id}")
-    public ResponseEntity<ProductResponseDTO> read(@PathVariable("id") long id){
+    public ResponseEntity<ProductResponseDTO> read(@PathVariable("id") Long id){
         ProductResponseDTO responseDTO = productService.read(id);
         return ResponseEntity.ok(responseDTO);
     }

@@ -23,22 +23,26 @@ public class UserService {
         this.userRepository = userRepository;
     }
     
-    public UserResponseDTO create(UserCreateDTO dto){      
-        
-        
+    public UserResponseDTO create(UserCreateDTO dto){                      
         if(userRepository.existsByEmail(dto.getEmail())){
             throw new RuntimeException("Email is registered");
         }
 
         UserEntity entity = dto.toEntity();             
-        entity.setPassword(passwordEncoder.encode(dto.getPassword()));
-        
-        userRepository.save(entity);
-        
-        return new UserResponseDTO(entity);        
+        if(entity.getName().equals("") || entity.getName() == null
+                || entity.getEmail().equals("") || entity.getEmail() == null
+                || entity.getPassword().equals("") || entity.getPassword() == null)
+        {                
+            return null;            
+        } else{
+            entity.setPassword(passwordEncoder.encode(dto.getPassword()));        
+            userRepository.save(entity);      
+            return new UserResponseDTO(entity);    
+        }
+    
     }    
     
-    public UserResponseDTO alter(Long id, UserUpdateDTO dto){             
+    public UserResponseDTO update(long id, UserUpdateDTO dto){             
         UserEntity entity = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         BeanUtils.copyProperties(dto, entity, "id");   
@@ -56,7 +60,7 @@ public class UserService {
         return new UserResponseDTO(user);
     }
     
-    public UserResponseDTO findById(Long id, UserResponseDTO dto){
+    public UserResponseDTO findById(long id, UserResponseDTO dto){
         UserEntity entity = new UserEntity();        
         entity.setName(dto.getName());
         entity.setEmail(dto.getEmail());        

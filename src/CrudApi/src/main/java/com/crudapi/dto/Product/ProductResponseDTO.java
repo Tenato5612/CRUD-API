@@ -49,7 +49,7 @@ public class ProductResponseDTO {
         this.productUrl = entity.getProductUrl();
         this.price = entity.getPrice();                
         this.img = entity.getImg();              
-        this.createAt = entity.getCreateAt();
+        this.createAt = entity.getCreateAt();         
         this.category = entity.getCategory();
         return entity;
     }
