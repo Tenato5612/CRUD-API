@@ -1,9 +1,11 @@
-package com.crudapi.dto.User;
+package com.crudapi.User;
 
-import com.crudapi.Entity.UserEntity;
-import com.crudapi.Entity.UserEntity.Status;
+import com.crudapi.User.UserEntity;
+import com.crudapi.User.UserEntity.Status;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -11,16 +13,17 @@ import jakarta.validation.constraints.NotBlank;
 public class UserCreateDTO {
     
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @NotBlank
+    @NotBlank(message = "Canont Name be null or blank")
     private String name;    
     
     @Email
-    @NotBlank  
+    @NotBlank  (message = "Canont Email be null or blank")
     private String email;            
     
-    @NotBlank
+    @NotBlank(message = "Canont Password be null or blank")
     private String password;  
     
     @Enumerated(EnumType.STRING)

@@ -1,9 +1,9 @@
-package com.crudapi.Controller;
+package com.crudapi.Product;
 
-import com.crudapi.dto.Product.ProductCreateDTO;
-import com.crudapi.dto.Product.ProductResponseDTO;
-import com.crudapi.dto.Product.ProductUpdateDTO;
-import com.crudapi.services.ProductService;
+import com.crudapi.Product.ProductCreateDTO;
+import com.crudapi.Product.ProductResponseDTO;
+import com.crudapi.Product.ProductUpdateDTO;
+import com.crudapi.Product.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;

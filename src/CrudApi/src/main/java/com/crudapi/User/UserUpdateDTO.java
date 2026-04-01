@@ -1,8 +1,11 @@
-package com.crudapi.dto.User;
+package com.crudapi.User;
 
-import com.crudapi.Entity.UserEntity;
-import com.crudapi.Entity.UserEntity.Status;
-import jakarta.persistence.Column;
+import com.crudapi.User.UserEntity;
+import com.crudapi.User.UserEntity.Status;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -11,15 +14,17 @@ import jakarta.validation.constraints.NotNull;
 public class UserUpdateDTO {
     
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @NotNull
-    private String name;
+    @NotNull(message = "Invalid Id format")
+    private String name;        
     
     @Email
-    @NotBlank
+    @NotBlank(message = "Canont Url be null or blank")
     private String email;    
         
+    @Enumerated(EnumType.STRING)
     private Status status;
     
     public UserEntity toEntity(){        
@@ -27,6 +32,7 @@ public class UserUpdateDTO {
         this.id = entity.getId();
         this.name = entity.getName();
         this.email = entity.getEmail();
+        
         this.status = entity.getStatus();     
         return entity;
     }

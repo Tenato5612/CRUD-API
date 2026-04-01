@@ -1,7 +1,7 @@
 package com.crudapi.services;
 
-import com.crudapi.Entity.UserEntity;
-import com.crudapi.Repository.UserRepository;
+import com.crudapi.User.UserEntity;
+import com.crudapi.User.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

@@ -1,5 +1,7 @@
 package com.crudapi.Entity;
 
+import com.crudapi.Scrap.ScrapEntity;
+import com.crudapi.Product.ProductEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -7,7 +9,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.time.LocalDateTime;
-import org.hibernate.annotations.ManyToAny;
 
 public class PriceEntity {
     
@@ -22,12 +23,12 @@ public class PriceEntity {
     @ManyToOne
     @JoinColumn
     @Column(nullable = false)
-    private ProductEntity id_Product;
+    private ProductEntity idProduct;
     
     @ManyToOne
     @JoinColumn
     @Column(nullable = false)
-    private ScrapEntity id_SourceScrap;
+    private ScrapEntity idSourceScrap;
     
     @Column(nullable = false)
     private float value;
@@ -36,10 +37,10 @@ public class PriceEntity {
     private float  currency;
     
     @Column(nullable = false)
-    private short is_Valid;
+    private short isValid;
     
     @Column(nullable = false)
-    private String error_Message;
+    private String errorMessage;
     
     @Column(nullable = false)
     private LocalDateTime colletedAt;             
@@ -52,22 +53,38 @@ public class PriceEntity {
         this.id = id;
     }
 
-    public ProductEntity getId_Product() {
-        return id_Product;
+    public ProductEntity getIdProduct() {
+        return idProduct;
     }
 
-    public void setId_Product(ProductEntity id_Product) {
-        this.id_Product = id_Product;
+    public void setIdProduct(ProductEntity idProduct) {
+        this.idProduct = idProduct;
     }
 
-    public ScrapEntity getId_SourceScrap() {
-        return id_SourceScrap;
+    public ScrapEntity getIdSourceScrap() {
+        return idSourceScrap;
     }
 
-    public void setId_SourceScrap(ScrapEntity id_SourceScrap) {
-        this.id_SourceScrap = id_SourceScrap;
-    }        
+    public void setIdSourceScrap(ScrapEntity idSourceScrap) {
+        this.idSourceScrap = idSourceScrap;
+    }
 
+    public short getIsValid() {
+        return isValid;
+    }
+
+    public void setIsValid(short isValid) {
+        this.isValid = isValid;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
+    }      
+    
     public float getValue() {
         return value;
     }
@@ -82,22 +99,6 @@ public class PriceEntity {
 
     public void setCurrency(float currency) {
         this.currency = currency;
-    }
-
-    public short getIs_Valid() {
-        return is_Valid;
-    }
-
-    public void setIs_Valid(short iss_Valid) {
-        this.is_Valid = iss_Valid;
-    }
-
-    public String getError_Message() {
-        return error_Message;
-    }
-
-    public void setError_Message(String error_Message) {
-        this.error_Message = error_Message;
     }
 
     public LocalDateTime getColletedAt() {

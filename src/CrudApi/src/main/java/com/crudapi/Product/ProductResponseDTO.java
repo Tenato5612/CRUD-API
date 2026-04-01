@@ -1,9 +1,10 @@
-package com.crudapi.dto.Product;
+package com.crudapi.Product;
 
-import com.crudapi.Entity.ProductEntity;
-import com.crudapi.Entity.ProductEntity.Category;
+import com.crudapi.Product.ProductEntity.Category;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -19,18 +20,18 @@ public class ProductResponseDTO {
     }
     
     @Id
-    @NotNull   
+    @GeneratedValue(strategy = GenerationType.IDENTITY) 
     private Long id;
         
-    @NotBlank(message = "Invalid name format")
+    @NotBlank(message = "Canont Name be null or blank")
     private String name;
     
-    @NotBlank(message = "Invalid Url format")
+    @NotBlank(message = "Canont Url be null or blank")
     private String productUrl;
     
-    @NotNull(message = "Invalid price format")
+    @NotNull(message = "Invalid Price format")
     private BigDecimal price;        
-    
+        
     private String img;
     
     @Enumerated(EnumType.STRING)
@@ -51,6 +52,7 @@ public class ProductResponseDTO {
         this.img = entity.getImg();              
         this.createAt = entity.getCreateAt();         
         this.category = entity.getCategory();
+        haveProduct();
         return entity;
     }
     
@@ -61,6 +63,7 @@ public class ProductResponseDTO {
         this.price = entity.getPrice();      
         cents();
         this.img = entity.getImg();
+        entity.setStatus(ProductEntity.Status.Active);
         haveProduct();        
         this.createAt = entity.getCreateAt();           
         this.category = entity.getCategory();
@@ -68,10 +71,10 @@ public class ProductResponseDTO {
     
     //Verify if the product have available and set your status
     public void haveProduct(){
-        if(price == null || price.compareTo(BigDecimal.ZERO) == 0){
-            this.status = Status.Disable;
-        } else{
+        if(price != null && price.compareTo(BigDecimal.ZERO) > 0){
             this.status = Status.Active;
+        } else{
+            this.status = Status.Disable;
         }                            
     }
     

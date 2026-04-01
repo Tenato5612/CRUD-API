@@ -9,8 +9,6 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import static org.springframework.security.config.web.server.ServerHttpSecurity.http;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -64,7 +62,7 @@ public class WebSecurityConfig {
         */
         
         http.csrf(csrf -> csrf.disable()).cors(cors -> {})
-                .authorizeHttpRequests(auth -> auth.requestMatchers("/users/**", "/product/**")
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/users/**", "/product/**", "/store/**")
                         .permitAll().requestMatchers("/auth/**").permitAll()
                         .anyRequest().authenticated());
         return http.build();                        

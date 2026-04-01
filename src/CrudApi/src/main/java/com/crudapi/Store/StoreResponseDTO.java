@@ -1,9 +1,11 @@
-package com.crudapi.dto.Store;
+package com.crudapi.Store;
 
-import com.crudapi.Entity.StoreEntity;
-import com.crudapi.Entity.StoreEntity.Status;
+import com.crudapi.Store.StoreEntity;
+import com.crudapi.Store.StoreEntity.Status;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -12,16 +14,16 @@ import java.time.LocalDateTime;
 public class StoreResponseDTO {
     
     @Id
-    @NotNull(message = "Invalid Id format")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @NotBlank(message = "Invalid name format")
+    @NotBlank(message = "Canont Name be null or blank")
     private String name;
     
-    @NotBlank(message = "Invalid domain format")
+    @NotBlank(message = "Canont Domain be null or blank")
     private String domain;
     
-    @NotBlank(message = "Invalid Url format")
+    @NotBlank(message = "Canont Url be null or blank")
     private String siteUrl;
     
     @Enumerated(EnumType.STRING)
@@ -47,7 +49,17 @@ public class StoreResponseDTO {
         this.domain = entity.getDomain();
         this.siteUrl= entity.getSiteUrl();
         this.status = entity.getStatus();
+        storeStatus();
         this.createAt = entity.getCreateAt();             
+    }
+    
+    final void storeStatus(){
+        if(domain != null && !domain.isBlank()){
+            setStatus(Status.Online);
+        } else{
+            setStatus(Status.Offline);
+        }
+    
     }
 
     public Long getId() {

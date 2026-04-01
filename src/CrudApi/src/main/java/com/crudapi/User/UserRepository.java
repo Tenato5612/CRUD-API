@@ -1,6 +1,6 @@
-package com.crudapi.Repository;
+package com.crudapi.User;
 
-import com.crudapi.Entity.UserEntity;
+import com.crudapi.User.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<UserEntity, Long>{    

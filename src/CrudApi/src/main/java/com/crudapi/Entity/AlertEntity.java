@@ -77,7 +77,5 @@ public class AlertEntity {
 
     public void setTriggeredAt(LocalDateTime triggeredAt) {
         this.triggeredAt = triggeredAt;
-    }
-    
-    
+    }       
 }

@@ -1,27 +1,27 @@
-package com.crudapi.dto.Product;
+package com.crudapi.Product;
 
-import com.crudapi.Entity.ProductEntity;
-import com.crudapi.Entity.ProductEntity.Category;
+import com.crudapi.Product.ProductEntity.Category;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 public class ProductUpdateDTO {
     
-    @NotNull
+    @NotBlank(message = "Canont Name be null or blank")
     private String name;
     
-    @NotNull
+    @NotBlank(message = "Canont Url be null or blank")
     private String productUrl;
     
-    @NotNull(message = "")
+    @NotNull(message = "Invalid Id format")
     private BigDecimal price;
-    
+        
     private String img;             
     
     @Enumerated(EnumType.STRING)
-    private Category category;
+    private Category category;        
     
     public ProductEntity toEntity(){
         ProductEntity entity = new ProductEntity();

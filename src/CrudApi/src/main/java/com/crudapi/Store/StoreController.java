@@ -1,9 +1,6 @@
-package com.crudapi.Controller;
+package com.crudapi.Store;
 
-import com.crudapi.dto.Store.StoreCreateDTO;
-import com.crudapi.dto.Store.StoreResponseDTO;
-import com.crudapi.dto.Store.StoreUpdateDTO;
-import com.crudapi.services.StoreService;
+import com.crudapi.Store.StoreService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -38,7 +35,7 @@ public class StoreController {
     @ApiResponse(responseCode = "201")
     @PostMapping
     public ResponseEntity<StoreResponseDTO> create(@RequestBody StoreCreateDTO dto){
-        StoreResponseDTO respDTO = storeService.create(dto);
+        StoreResponseDTO respDTO = storeService.create(dto);                
         if(respDTO.getName().equals("") || respDTO == null
                 || respDTO.getDomain().equals("") || respDTO.getDomain() == null){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(respDTO);
@@ -51,6 +48,11 @@ public class StoreController {
     public ResponseEntity<StoreResponseDTO> update(@PathVariable("id") Long id, @RequestBody StoreUpdateDTO dto){
         return ResponseEntity.ok(storeService.update(id, dto));
     }
+    
+    @GetMapping("/{id}/product")
+    public ResponseEntity<StoreResponseDTO> listProductByStore(@PathVariable("id") long id){        
+        return ResponseEntity.ok(storeService.read(id));
+    }    
     
     @GetMapping("/{id}")
     public ResponseEntity<StoreResponseDTO> read(@PathVariable("id") Long id){
@@ -65,7 +67,6 @@ public class StoreController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") Long id){
         storeService.delete(id);
-        return ResponseEntity.noContent().build();
-    
+        return ResponseEntity.noContent().build();    
     }                      
 }

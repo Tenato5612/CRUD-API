@@ -1,12 +1,7 @@
-package com.crudapi.services;
+package com.crudapi.User;
 
-import com.crudapi.Entity.UserEntity;
-import com.crudapi.Repository.UserRepository;
-import com.crudapi.dto.User.UserCreateDTO;
-import com.crudapi.dto.User.UserResponseDTO;
-import com.crudapi.dto.User.UserUpdateDTO;
+import com.crudapi.User.UserEntity;
 import java.util.List;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -27,7 +22,6 @@ public class UserService {
         if(userRepository.existsByEmail(dto.getEmail())){
             throw new RuntimeException("Email is registered");
         }
-
         UserEntity entity = dto.toEntity();             
         if(entity.getName().equals("") || entity.getName() == null
                 || entity.getEmail().equals("") || entity.getEmail() == null
@@ -45,12 +39,9 @@ public class UserService {
     public UserResponseDTO update(long id, UserUpdateDTO dto){             
         UserEntity entity = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-        BeanUtils.copyProperties(dto, entity, "id");   
-        entity.setName(dto.getName());
-        entity.setEmail(dto.getEmail());
-        
-        userRepository.save(entity);
-        
+        if(dto.getName() != null){entity.setName(dto.getName());}
+        if(dto.getName() != null){entity.setEmail(dto.getEmail());}                      
+        userRepository.save(entity);        
         return new UserResponseDTO(entity);
     }
             
@@ -61,13 +52,11 @@ public class UserService {
     }
     
     public UserResponseDTO findById(long id, UserResponseDTO dto){
-        UserEntity entity = new UserEntity();        
-        entity.setName(dto.getName());
-        entity.setEmail(dto.getEmail());        
-        entity.setCreateAt(dto.getCreateAt());
-        
+        UserEntity entity = new UserEntity();    
+        if(dto.getName() != null){entity.setName(dto.getName());}
+        if(dto.getName() != null){entity.setEmail(dto.getEmail());}    
+        if(dto.getCreateAt() != null){entity.setCreateAt(dto.getCreateAt());}
         userRepository.save(entity);
-       
         return new UserResponseDTO(entity);
     }
 

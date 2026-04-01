@@ -1,4 +1,4 @@
-package com.crudapi.Entity;
+package com.crudapi.Store;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -7,50 +7,42 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "users")
-public class UserEntity {
-           
-    //Change this status case user confirm email, or 'delete' your account
+@Table(name = "Store")
+public class StoreEntity {
+    
     public enum Status{
-        Active, Inactive, Disconect
-    }     
+        Online, Offline
+    }
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    @ManyToOne
-    @JoinColumn    
-    private UserProductEntity idUserProduct;
-    
+        
     @Column(nullable = false)
     private String name;
     
-    @Column(nullable = false, unique = true)
-    private String email;
-     
     @Column(nullable = false)
-    private String password;   
+    private String domain;
+    
+    @Enumerated(EnumType.STRING)
+    private Status status;
     
     @Column(nullable = false)
-    @Enumerated(EnumType.STRING)    
-    private Status status;
-      
-    @Column(nullable = false)
-    private LocalDateTime createAt;
-   
-    @PrePersist
-    public void prePersist(){
-        this.createAt = LocalDateTime.now();
-    }
+    private LocalDateTime createAt;  
+        
+    @Column(length = 2048)
+    private String siteUrl;
 
+    @PrePersist
+    private void prePersist(){
+        this.createAt = LocalDateTime.now();
+    }            
+    
     public Long getId() {
         return id;
     }
@@ -58,14 +50,6 @@ public class UserEntity {
     public void setId(Long id) {
         this.id = id;
     }
-
-    public UserProductEntity getIdUserProduct() {
-        return idUserProduct;
-    }
-
-    public void setIdUserProduct(UserProductEntity idUserProduct) {
-        this.idUserProduct = idUserProduct;
-    }        
 
     public String getName() {
         return name;
@@ -75,20 +59,12 @@ public class UserEntity {
         this.name = name;
     }
 
-    public String getEmail() {
-        return email;
+    public String getDomain() {
+        return domain;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
+    public void setDomain(String domain) {
+        this.domain = domain;
     }
 
     public Status getStatus() {
@@ -105,5 +81,13 @@ public class UserEntity {
 
     public void setCreateAt(LocalDateTime createAt) {
         this.createAt = createAt;
-    }         
+    }
+
+    public String getSiteUrl() {
+        return siteUrl;
+    }
+
+    public void setSiteUrl(String siteUrl) {
+        this.siteUrl = siteUrl;
+    }        
 }

@@ -1,6 +1,6 @@
 package com.crudapi.services;
 
-import com.crudapi.Entity.UserEntity;
+import com.crudapi.User.UserEntity;
 import java.util.ArrayList;
 import java.util.Collection;
 import org.springframework.security.core.GrantedAuthority;

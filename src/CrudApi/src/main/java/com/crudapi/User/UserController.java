@@ -1,9 +1,6 @@
-package com.crudapi.Controller;
+package com.crudapi.User;
 
-import com.crudapi.dto.User.UserCreateDTO;
-import com.crudapi.dto.User.UserResponseDTO;
-import com.crudapi.dto.User.UserUpdateDTO;
-import com.crudapi.services.UserService;
+import com.crudapi.User.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;

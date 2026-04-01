@@ -1,20 +1,20 @@
-package com.crudapi.dto.Store;
+package com.crudapi.Store;
 
-import com.crudapi.Entity.StoreEntity.Status;
-import com.crudapi.Entity.StoreEntity;
+import com.crudapi.Store.StoreEntity.Status;
+import com.crudapi.Store.StoreEntity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotBlank;
 
 public class StoreUpdateDTO {
     
-    @NotBlank(message = "Cannot name be null or blank")
+    @NotBlank(message = "Cannot Name be null or blank")
     private String name;
     
-    @NotBlank(message = "Cannot domain be null or blank")
+    @NotBlank(message = "Cannot Domain be null or blank")
     private String domain;
     
-    @NotBlank(message = "Cannot domain be null or blank")
+    @NotBlank(message = "Cannot Url be null or blank")
     private String siteUrl;
     
     @Enumerated(EnumType.STRING)

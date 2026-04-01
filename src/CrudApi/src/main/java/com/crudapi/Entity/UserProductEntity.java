@@ -1,5 +1,7 @@
 package com.crudapi.Entity;
 
+import com.crudapi.User.UserEntity;
+import com.crudapi.Product.ProductEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -31,6 +33,10 @@ public class UserProductEntity {
     
     @Column(nullable = false)    
     private LocalDateTime createAt;
+    
+    private void prePersist(){
+        this.createAt = LocalDateTime.now();
+    }
     
     @Column(nullable = false)
     private Enum status;
@@ -82,8 +88,4 @@ public class UserProductEntity {
     public void setStatus(Enum status) {
         this.status = status;
     }
-    
-    
-    
-    
 }
