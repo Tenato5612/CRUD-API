@@ -17,6 +17,8 @@ public class StoreResponseDTO {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
+    
+    
     @NotBlank(message = "Canont Name be null or blank")
     private String name;
     

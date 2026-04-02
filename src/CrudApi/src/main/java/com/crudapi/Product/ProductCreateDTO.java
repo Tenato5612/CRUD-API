@@ -19,6 +19,7 @@ public class ProductCreateDTO {
     @URL
     private String productUrl;
     
+    @NotNull(message = "Cannot storeId be null ")
     private StoreEntity storeId;
     
     @NotNull(message = "Invalid Price format")
@@ -27,7 +28,7 @@ public class ProductCreateDTO {
     
     @Enumerated(EnumType.STRING)
     private Category category;       
-    
+        
     private Status status;
     
     private String img;    
@@ -47,16 +48,6 @@ public class ProductCreateDTO {
         }                
         return entity;
     }
-    
-    public Status haveProduct(){
-        if(price != null || price.compareTo(BigDecimal.ZERO) >0){
-            Status status = Status.Active;
-            return status;
-        } else{
-            Status status = Status.Disable;
-            return status;
-        }                                    
-    }
 
     public StoreEntity getStoreId() {
         return storeId;
@@ -65,8 +56,6 @@ public class ProductCreateDTO {
     public void setStoreId(StoreEntity storeId) {
         this.storeId = storeId;
     }
-
-
 
     public String getName() {
         return name;

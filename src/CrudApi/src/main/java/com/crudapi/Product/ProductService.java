@@ -23,18 +23,23 @@ public class ProductService {
     }        
     
     public ProductResponseDTO create(ProductCreateDTO dto){                          
+                      
+        if(entity.getProductUrl().isBlank() || entity.getProductUrl() == null){                
+            throw new IllegalArgumentException("Url cannor be null");
+        }
+        
+        if(entity.getName().isBlank() || entity.getName() == null){
+            throw new IllegalArgumentException("Name cannot be null");
+        }
+        
         String domain = extractDomain(dto.getProductUrl());
         storeEntity = storeService.findByDomain(domain);
-        entity.setStore(storeEntity);                        
-        if(entity.getProductUrl().isBlank() || entity.getProductUrl() == null 
-                || entity.getName().isBlank() || entity.getName() == null){
-            throw new IllegalArgumentException("nvalid data");
-        } else{
-            productRepository.save(entity);
-            return new ProductResponseDTO(entity);
-        }        
-    }
-    
+        
+        entity.setStore(storeEntity); 
+        productRepository.save(entity);
+        
+        return new ProductResponseDTO(entity);
+    }    
             
     private String extractDomain(String url){
         try {   
@@ -52,13 +57,11 @@ public class ProductService {
     
     public ProductResponseDTO update(Long id, ProductUpdateDTO dto){
         entity = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found"));        
+                .orElseThrow(() -> new RuntimeException("Product not found"));     
+        
         if(dto.getName() != null){
             entity.setName(dto.getName());
         }        
-        if(dto.getProductUrl() != null){
-            entity.setProductUrl(dto.getProductUrl());
-        }
         if(dto.getImg() != null){
             entity.setImg(dto.getImg());
         }
@@ -68,6 +71,14 @@ public class ProductService {
         if(dto.getCategory() != null){
             entity.setCategory(dto.getCategory());
         }     
+        if(dto.getProductUrl() != null){
+            entity.setProductUrl(dto.getProductUrl());
+            
+            String domain = extractDomain(dto.getProductUrl());
+            storeEntity = storeService.findByDomain(domain);
+            entity.setStore(storeEntity);
+        }
+        
         productRepository.save(entity);        
         return new ProductResponseDTO(entity);
     }

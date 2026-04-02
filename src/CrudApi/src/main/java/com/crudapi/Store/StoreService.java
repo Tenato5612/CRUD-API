@@ -70,6 +70,15 @@ public class StoreService {
                 .orElseThrow(() -> new StoreNotFoundException
                 ("Store not found domain" + domain));       
     }      
+    
+    
+    public StoreEntity findByDomain(String domain){
+
+        return storeRepository.findByDomain(domain)
+            .orElseThrow(() -> new RuntimeException(
+                "Store not found for domain: " + domain
+            ));
+    }
         
     private String extractDomain(String url){
         try {   

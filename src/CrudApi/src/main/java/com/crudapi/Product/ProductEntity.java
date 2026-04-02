@@ -39,7 +39,7 @@ public class ProductEntity {
 
     @ManyToOne    
     @JoinColumn(name = "userProduct_id")
-    private UserProductEntity userProduct;    
+    private Long userProduct;    
     
     @Column(nullable = false)
     private String name;
@@ -85,14 +85,14 @@ public class ProductEntity {
         this.store = store;
     }
 
-    public UserProductEntity getUserProduct() {
+    public Long getUserProduct() {
         return userProduct;
     }
 
-    public void setUserProduct(UserProductEntity userProduct) {
+    public void setUserProduct(Long userProduct) {
         this.userProduct = userProduct;
-    }   
-       
+    }
+
     public String getName() {
         return name;
     }
