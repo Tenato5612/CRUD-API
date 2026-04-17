@@ -1,5 +1,6 @@
 package com.crudapi.Price;
 
+import com.crudapi.Product.ProductEntity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -14,32 +15,33 @@ public class PriceResponseDTO {
     private Long id;
 
     @NotNull(message = "Cannot productId be not null")
-    private Long productId;
+    private ProductEntity product;
         
+    @NotNull(message = "Cannot Scrap be not null")
     private Long scrapId;
     
-    @NotNull(message = "Cannot value be not null")
-    private BigDecimal value;
+    @NotNull(message = "Cannot price be not null")
+    private BigDecimal price;
     
     @NotNull(message = "Cannot collectedAt be not null")
-    private LocalDateTime colletedAt;
+    private LocalDateTime createAt;
 
     public PriceEntity toEntity(){
         PriceEntity entity = new PriceEntity();
         this.id = entity.getId();
-        this.productId = entity.getProductId();
+        this.product = entity.getProduct();
         this.scrapId = entity.getScrapId();
-        this.value = entity.getValue();
-        this.colletedAt = entity.getColletedAt();
+        this.price = entity.getPrice();
+        this.createAt = entity.getCreateAt();
         return null;
     }
 
     public PriceResponseDTO(PriceEntity entity){
         this.id = entity.getId();
-        this.productId = entity.getProductId();
+        this.product = entity.getProduct();
         this.scrapId = entity.getScrapId();
-        this.value = entity.getValue();
-        this.colletedAt = entity.getColletedAt();
+        this.price = entity.getPrice();
+        this.createAt = entity.getCreateAt();
     }
 
     public Long getId() {
@@ -50,12 +52,12 @@ public class PriceResponseDTO {
         this.id = id;
     }
 
-    public Long getProductId() {
-        return productId;
+    public ProductEntity getProduct() {
+        return product;
     }
 
-    public void setProductId(Long productId) {
-        this.productId = productId;
+    public void setProduct(ProductEntity product) {
+        this.product = product;
     }
 
     public Long getScrapId() {
@@ -66,20 +68,20 @@ public class PriceResponseDTO {
         this.scrapId = scrapId;
     }
 
-    public BigDecimal getValue() {
-        return value;
+    public BigDecimal getPrice() {
+        return price;
     }
 
-    public void setValue(BigDecimal value) {
-        this.value = value;
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 
-    public LocalDateTime getColletedAt() {
-        return colletedAt;
+    public LocalDateTime getCreateAt() {
+        return createAt;
     }
 
-    public void setColletedAt(LocalDateTime colletedAt) {
-        this.colletedAt = colletedAt;
-    }   
+    public void setCreateAt(LocalDateTime createAt) {
+        this.createAt = createAt;
+    }
 }
 

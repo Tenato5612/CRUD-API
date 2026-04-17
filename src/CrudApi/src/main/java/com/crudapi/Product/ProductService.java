@@ -14,23 +14,23 @@ public class ProductService {
     final ProductRepository productRepository;
     @Autowired           
     private StoreService storeService;
-     
-    ProductEntity entity;        
-    StoreEntity storeEntity;
     
     public ProductService(ProductRepository productRepository){
         this.productRepository = productRepository;
     }        
     
     public ProductResponseDTO create(ProductCreateDTO dto){                          
-                      
-        if(entity.getProductUrl().isBlank() || entity.getProductUrl() == null){                
+        ProductEntity entity = new ProductEntity();    
+        StoreEntity storeEntity;
+        if(dto.getProductUrl() == null || dto.getProductUrl().isBlank()){                
             throw new IllegalArgumentException("Url cannor be null");
         }
         
-        if(entity.getName().isBlank() || entity.getName() == null){
+        if(dto.getName().isBlank() || dto.getName() == null){
             throw new IllegalArgumentException("Name cannot be null");
         }
+        
+        entity = dto.toEntity();
         
         String domain = extractDomain(dto.getProductUrl());
         storeEntity = storeService.findByDomain(domain);
@@ -56,6 +56,8 @@ public class ProductService {
     }
     
     public ProductResponseDTO update(Long id, ProductUpdateDTO dto){
+        ProductEntity entity = new ProductEntity();  
+        StoreEntity storeEntity;
         entity = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found"));     
         
@@ -65,7 +67,7 @@ public class ProductService {
         if(dto.getImg() != null){
             entity.setImg(dto.getImg());
         }
-        if(dto.getPrice() != null){
+        if(dto.getPrice()!= null){
             entity.setPrice(dto.getPrice());
         }
         if(dto.getCategory() != null){
@@ -84,6 +86,7 @@ public class ProductService {
     }
     
     public ProductResponseDTO read(Long id){
+        ProductEntity entity = new ProductEntity();  
         entity = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
         

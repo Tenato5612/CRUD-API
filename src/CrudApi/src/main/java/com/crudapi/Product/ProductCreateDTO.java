@@ -20,9 +20,8 @@ public class ProductCreateDTO {
     private String productUrl;
     
     @NotNull(message = "Cannot storeId be null ")
-    private StoreEntity storeId;
-    
-    @NotNull(message = "Invalid Price format")
+    private StoreEntity store;
+        
     @Positive(message = "Price collected must be positive")
     private BigDecimal price;        
     
@@ -40,7 +39,7 @@ public class ProductCreateDTO {
         entity.setPrice(this.price);        
         entity.setImg(this.img);                
         entity.setCategory(this.category);    
-        entity.setStore(this.storeId);
+        entity.setStore(this.store);
         if(price != null && price.compareTo(BigDecimal.ZERO) > 0){
             entity.setStatus(ProductEntity.Status.Active);
          }else{
@@ -49,12 +48,12 @@ public class ProductCreateDTO {
         return entity;
     }
 
-    public StoreEntity getStoreId() {
-        return storeId;
+    public StoreEntity getStore() {
+        return store;
     }
 
-    public void setStoreId(StoreEntity storeId) {
-        this.storeId = storeId;
+    public void setStore(StoreEntity store) {
+        this.store = store;
     }
 
     public String getName() {

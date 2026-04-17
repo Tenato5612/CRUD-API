@@ -6,8 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PriceRepository extends JpaRepository<PriceEntity, Long>{
 
-    public PriceEntity findTopByProductOrderByCreateAtDesc(ProductEntity productEntity);
+    public List<PriceEntity> findByProductOrderByCreateAtAsc(ProductEntity product);
 
-    public List<PriceEntity> findByProductOrderByCreatedAtAsc(ProductEntity product);
+    public PriceEntity findTopByProductOrderByCreateAtDesc(ProductEntity product);
     
 }

@@ -53,7 +53,7 @@ public class ProductController {
     }
     
     @GetMapping
-    public ResponseEntity<List<ProductResponseDTO>> findById(){
+    public ResponseEntity<List<ProductResponseDTO>> findAll(){
         return ResponseEntity.ok(productService.findAll());
     }
 

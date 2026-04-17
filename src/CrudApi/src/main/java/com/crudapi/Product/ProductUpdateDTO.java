@@ -56,7 +56,7 @@ public class ProductUpdateDTO {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
-    }   
+    }
     
     public String getImg() {
         return img;

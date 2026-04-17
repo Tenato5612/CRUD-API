@@ -2,6 +2,10 @@ package com.crudapi.Price;
 
 import com.crudapi.Product.ProductEntity;
 import com.crudapi.Product.ProductRepository;
+import com.crudapi.Product.ProductService;
+import com.crudapi.Product.ProductUpdateDTO;
+import com.crudapi.Scrap.ScrapEntity;
+import com.crudapi.Scrap.ScrapRepository;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
@@ -13,64 +17,57 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class PriceService {
     
     private final PriceRepository priceRepository;        
     private final ProductRepository productRepository;
+    private final ScrapRepository scrapRepository;
     
     public PriceService(PriceRepository priceRepository,
-                        ProductRepository productRepository){
+                        ProductRepository productRepository,
+                        ScrapRepository scrapRepository1){
         this.priceRepository = priceRepository;
         this.productRepository = productRepository;        
+        this.scrapRepository = scrapRepository1;
     }
-    
-    public PriceResponseDTO create(PriceCreateDTO dto){        
-        PriceEntity entity = new PriceEntity();
-        ProductEntity productEntity = new ProductEntity();
-        if(dto == null){
-            throw new IllegalArgumentException("DTO cannot be null");
-        }
-
-        if(dto.getValue() == null){
-            throw new IllegalArgumentException("Price value cannot be null");
-        }
+          
+    @Transactional
+    public PriceResponseDTO create(PriceCreateDTO dto){          
+        validateCreateDTO(dto);                       
         
-        productEntity = productRepository.findById(dto.getProductId())
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+        PriceEntity entity;                            
+        entity = dto.toEntity();  
+        ProductService productService;
+        ProductUpdateDTO productUpdateDTO;
         
-        PriceEntity lastPrice = priceRepository.findTopByProductOrderByCreateAtDesc(productEntity);
-
-        if(lastPrice != null && lastPrice.getValue().compareTo(dto.getValue()) == 0){
-            return new PriceResponseDTO(lastPrice);
-        }
-
-        entity.setProductId(productEntity);
-        entity.setValue(dto.getValue());
+        ProductEntity productEntity = productRepository.findById(dto.getProduct())
+                .orElseThrow(() -> new RuntimeException("Product not found with id: " + dto.getProduct()));                               
         
-        LocalDateTime collectedAt = dto.getCreateAt() != null ? dto.getCreateAt() : LocalDateTime.now();
-        entity.setCreateAt(collectedAt);
+        ScrapEntity scrapEntity = scrapRepository.findById(dto.getScrapId()).orElseThrow(() -> new RuntimeException("Scrap not found"));                                                
+//        PriceEntity lastPrice = priceRepository.findTopByProductOrderByCreateAtDesc(productEntity);
+//        if(lastPrice != null && lastPrice.getPrice().compareTo(dto.getPrice()) == 0){
+//            return new PriceResponseDTO(lastPrice);
+//        }
         
-        entity.setCreateAt(LocalDateTime.now());                    
-
-        if (dto.getValue().compareTo(BigDecimal.ZERO) > 0) {
-            productEntity.setStatus(ProductEntity.Status.Active);
-        } else {
-            productEntity.setStatus(ProductEntity.Status.Disable);
-        }
+        entity.setCreateAt(dto.getCreateAt() != null ? dto.getCreateAt() : LocalDateTime.now());        
+        entity.setProduct(productEntity);        
+        entity.setPrice(dto.getPrice());    
+        productEntity.setPrice(entity.getPrice());
         
+        productEntity.updateStatus();
+                                
         priceRepository.save(entity);
 
-        productEntity.setPrice(dto.getValue());
         productRepository.save(productEntity);
 
         return new PriceResponseDTO(entity);
     }        
     
-    public PriceResponseDTO getLastPriceByProduct(Long id){
-        ProductEntity productEntity = new ProductEntity();
-        productEntity = productRepository.findById(id)
+    public PriceResponseDTO lastPriceByProduct(Long id){        
+        ProductEntity productEntity = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
         
         PriceEntity last = priceRepository
@@ -87,46 +84,25 @@ public class PriceService {
         ProductEntity product = productRepository.findById(productId)
                 .orElseThrow(() -> new RuntimeException("Product not found with id: " + productId));
         
-        List<PriceEntity> prices = priceRepository.findByProductOrderByCreatedAtAsc(product);
+        List<PriceEntity> prices = priceRepository.findByProductOrderByCreateAtAsc(product);
         
         return prices.stream()
                 .map(PriceResponseDTO::new)
                 .toList();
     }
-    
-    public PriceHistoryResponseDTO getPriceById(Long priceId) {
-        ProductEntity product = productRepository.findById(priceId)
-                .orElseThrow(() -> new RuntimeException("Product not found with id: " + priceId));
 
-        PriceEntity lastPrice = priceRepository.findTopByProductOrderByCreateAtDesc(product);
-        
-        if (lastPrice == null) {
-            throw new RuntimeException("No price found for product id: " + priceId);
-        }
-        
-        return new PriceResponseDTO(lastPrice);
-        
-    }    
-    
-    public void deletePrice(Long priceId) {
-        // ✅ CORREÇÃO 14: Método de deleção
-        // Motivo: Necessário para correções e manutenção
-        
-        if (!priceRepository.existsById(priceId)) {
-            throw new RuntimeException("Price not found with id: " + priceId);
-        }
-        priceRepository.deleteById(priceId);
+    public PriceResponseDTO getPriceById(Long priceId){
+        PriceEntity price = priceRepository.findById(priceId)
+            .orElseThrow(() -> new RuntimeException("Price not found"));
+
+        return new PriceResponseDTO(price);
     }
     
     public PriceHistoryResponseDTO getProductPriceHistory(Long productId) {
-        // ✅ CORREÇÃO 15: Método corrigido para usar a lista correta de preços
-        // Antes: usava findTopByProduct... (retorna UM preço)
-        // Agora: usa findByProductOrderByCollectedAtAsc (retorna LISTA de preços)
-        
         ProductEntity product = productRepository.findById(productId)
                 .orElseThrow(() -> new RuntimeException("Product not found with id: " + productId));
         
-        List<PriceEntity> prices = priceRepository.findByProductOrderByCreatedAtAsc(product);
+        List<PriceEntity> prices = priceRepository.findByProductOrderByCreateAtAsc(product);
         
         if (prices.isEmpty()) {
             PriceHistoryResponseDTO emptyHistory = new PriceHistoryResponseDTO();
@@ -138,26 +114,21 @@ public class PriceService {
             return emptyHistory;
         }
         
-        // Agrupa preços por mês/ano
         Map<String, List<PriceEntity>> groupedByMonth = groupPricesByMonth(prices);
         
-        // Constrói resumo para cada mês
         List<PriceHistoryResponseDTO.MonthlySummaryDTO> history = new ArrayList<>();
         for (Map.Entry<String, List<PriceEntity>> entry : groupedByMonth.entrySet()) {
             PriceHistoryResponseDTO.MonthlySummaryDTO summary = buildMonthlySummary(entry.getKey(), entry.getValue());
             history.add(summary);
         }
-        
-        // Calcula variação entre meses consecutivos
+                
         calculateVariationBetweenMonths(history);
-        
-        // Monta resposta
+               
         PriceHistoryResponseDTO response = new PriceHistoryResponseDTO();
         response.setProductId(product.getId());
         response.setProductName(product.getName());
         response.setCurrentPrice(product.getPrice());
         
-        // ✅ CORREÇÃO 16: LastUpdate é a data do último preço coletado
         LocalDate lastUpdate = prices.get(prices.size() - 1).getCreateAt().toLocalDate();
         response.setLastUpdate(lastUpdate);
         response.setHistory(history);
@@ -165,18 +136,17 @@ public class PriceService {
         return response;
     }
     
-    private void validateCreateDTO(PriceCreateDTO dto) {
-        // ✅ CORREÇÃO 17: Validações centralizadas
+    private void validateCreateDTO(PriceCreateDTO dto) {        
         if (dto == null) {
             throw new IllegalArgumentException("PriceCreateDTO cannot be null");
         }
-        if (dto.getProductId() == null) {
+        if (dto.getProduct() == null) {
             throw new IllegalArgumentException("Product ID cannot be null");
         }
-        if (dto.getValue() == null) {
+        if (dto.getPrice()== null) {
             throw new IllegalArgumentException("Price value cannot be null");
         }
-        if (dto.getValue().compareTo(BigDecimal.ZERO) <= 0) {
+        if (dto.getPrice().compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Price value must be greater than zero");
         }
     }
@@ -190,14 +160,13 @@ public class PriceService {
             }
             grouped.get(monthKey).add(price);
         }
-
         return grouped;
     }
     
     private String getMonthName(int monthNumber) {
         String[] months = {
-            "JANEIRO", "FEVEREIRO", "MARÇO", "ABRIL", "MAIO", "JUNHO",
-            "JULHO", "AGOSTO", "SETEMBRO", "OUTUBRO", "NOVEMBRO", "DEZEMBRO"
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
         };
         return months[monthNumber - 1];
     }
@@ -209,23 +178,23 @@ public class PriceService {
         String month = getMonthName(Integer.parseInt(parts[1]));
 
         BigDecimal lowestPrice = prices.stream()
-                .map(PriceEntity::getValue)
+                .map(PriceEntity::getPrice)
                 .min(BigDecimal::compareTo)
                 .orElse(BigDecimal.ZERO);
         BigDecimal highestPrice = prices.stream()
-                .map(PriceEntity::getValue)
+                .map(PriceEntity::getPrice)
                 .max(BigDecimal::compareTo)
                 .orElse(BigDecimal.ZERO);
         BigDecimal averagePrice = prices.stream()
-                .map(PriceEntity::getValue)
+                .map(PriceEntity::getPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add)
                 .divide(BigDecimal.valueOf(prices.size()), 2, RoundingMode.HALF_UP);
 
-        BigDecimal lastPriceOfMonth = prices.get(prices.size() - 1).getValue();
+        BigDecimal lastPriceOfMonth = prices.get(prices.size() - 1).getPrice();
         Map<LocalDate, BigDecimal> dailyPrices = new LinkedHashMap<>();
         for (PriceEntity price : prices) {
             LocalDate date = price.getCreateAt().toLocalDate();
-            dailyPrices.put(date, price.getValue()); // Substitui pelo mais recente
+            dailyPrices.put(date, price.getPrice()); // Substitui pelo mais recente
         }
 
         PriceHistoryResponseDTO.MonthlySummaryDTO summary = new PriceHistoryResponseDTO.MonthlySummaryDTO();

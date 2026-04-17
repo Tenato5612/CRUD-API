@@ -1,23 +1,23 @@
 package com.crudapi.Price;
 
-import com.crudapi.Product.ProductEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.PrePersist;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public class PriceCreateDTO {           
+public class PriceCreateDTO {             
     
-    @NotBlank(message = "Cannot ProductId be null or blank")
-    private Long productId;
+    @NotNull(message = "Cannot ProductId be null")
+    private Long product;
     
-    @NotBlank(message = "Cannot scrapId be null or blank")
+    //@NotNull(message = "Cannot scrapId be null or blank")
     private Long scrapId;    
     
-    @NotNull(message = "Cannot value be null")
-    private BigDecimal value;
+    //@NotNull(message = "Cannot price be null")
+    @Positive(message = "Value must be greater than zero")
+    private BigDecimal price;
     
     @Column(nullable = false)
     private LocalDateTime createAt; 
@@ -25,25 +25,23 @@ public class PriceCreateDTO {
     @PrePersist
     public void prePersist(){
         this.createAt = LocalDateTime.now();
-    }
+    }   
+    
+    public PriceCreateDTO(){}
     
     public PriceEntity toEntity(){
-        PriceEntity entity = new PriceEntity();
-        ProductEntity productEntity = new ProductEntity();
-        entity.setProductName(productEntity.getName());
-        entity.setProductId(this.productId);
-        entity.setScrapId(this.scrapId);
-        entity.setValue(this.value);  
-        entity.setCreateAt(this.createAt);
+        PriceEntity entity = new PriceEntity();                    
+        entity.setPrice(this.price);  
+        entity.setCreateAt(this.createAt);        
         return entity;
     }
 
-    public Long getProductId() {
-        return productId;
+    public Long getProduct() {
+        return product;
     }
 
-    public void setProductId(Long productId) {
-        this.productId = productId;
+    public void setProduct(Long product) {
+        this.product = product;
     }
 
     public Long getScrapId() {
@@ -52,23 +50,21 @@ public class PriceCreateDTO {
 
     public void setScrapId(Long scrapId) {
         this.scrapId = scrapId;
-    }
-
-    public BigDecimal getValue() {
-        return value;
-    }
-
-    public void setValue(BigDecimal value) {
-        this.value = value;
     }        
 
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+   
     public LocalDateTime getCreateAt() {
         return createAt;
     }
 
     public void setCreateAt(LocalDateTime createAt) {
         this.createAt = createAt;
-    }
-    
-    
+    }        
 }

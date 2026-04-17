@@ -31,7 +31,7 @@ public class StoreService {
         if(storeRepository.existsByDomain(domain)){
             throw new RuntimeException("Alerdy, this Domain is registered");
         }        
-        if(domain.isBlank() || domain == null){
+        if(domain.isBlank()){
             return null;
         } else{
             storeRepository.save(entity);

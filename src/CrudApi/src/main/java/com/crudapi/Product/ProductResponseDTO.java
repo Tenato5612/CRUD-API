@@ -131,7 +131,7 @@ public class ProductResponseDTO {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
-    }   
+    }
 
     public Status getStatus() {
         return status;

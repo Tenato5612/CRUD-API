@@ -1,4 +1,4 @@
-package com.crudapi.Scrap;
+    package com.crudapi.Scrap;
 
 import com.crudapi.Scrap.ScrapEntity.Status;
 import jakarta.validation.constraints.NotNull;
