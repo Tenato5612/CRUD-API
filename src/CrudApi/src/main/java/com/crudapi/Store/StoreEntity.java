@@ -12,11 +12,11 @@ import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "Store")
+@Table(name = "store")
 public class StoreEntity {
     
     public enum Status{
-        Online, Offline
+        ONLINE, OFFLINE
     }
     
     @Id
@@ -26,21 +26,21 @@ public class StoreEntity {
     @Column(nullable = false)
     private String name;
     
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String domain;
     
     @Enumerated(EnumType.STRING)
     private Status status;
     
-    @Column(nullable = false)
-    private LocalDateTime createAt;  
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;  
         
-    @Column(length = 2048)
+    @Column(length = 2048, nullable = false)
     private String siteUrl;
 
     @PrePersist
     private void prePersist(){
-        this.createAt = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now();
     }            
     
     public Long getId() {
@@ -75,14 +75,14 @@ public class StoreEntity {
         this.status = status;
     }
 
-    public LocalDateTime getCreateAt() {
-        return createAt;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreateAt(LocalDateTime createAt) {
-        this.createAt = createAt;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
-
+    
     public String getSiteUrl() {
         return siteUrl;
     }

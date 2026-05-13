@@ -1,11 +1,13 @@
 package com.crudapi.Store;
 
-import com.crudapi.Store.StoreService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -43,28 +45,28 @@ public class StoreController {
             return ResponseEntity.status(HttpStatus.CREATED).body(respDTO);
         }                               
     }
+        
+    @GetMapping("/id/{id}")
+    public ResponseEntity<StoreResponseDTO> findStoreById(@PathVariable("id") Long id){
+        return ResponseEntity.ok(storeService.findStoreById(id));
+    }
     
-    @PutMapping("/{id}")
+    @GetMapping("/domain")
+    public ResponseEntity<Page<StoreDomainProjection>> findAllProjectedBy(@PageableDefault(size = 20, sort = "domain") Pageable pageable){
+        return ResponseEntity.ok(storeService.findAllProjectedBy(pageable));
+    }
+    
+    @GetMapping("/store")
+    public ResponseEntity<List<StoreResponseDTO>> allStore(){
+        return ResponseEntity.ok(storeService.allStore());
+    }
+    
+    @PutMapping("/update/id/{id}")
     public ResponseEntity<StoreResponseDTO> update(@PathVariable("id") Long id, @RequestBody StoreUpdateDTO dto){
         return ResponseEntity.ok(storeService.update(id, dto));
-    }
-    
-    @GetMapping("/{id}/product")
-    public ResponseEntity<StoreResponseDTO> listProductByStore(@PathVariable("id") long id){        
-        return ResponseEntity.ok(storeService.read(id));
-    }    
-    
-    @GetMapping("/{id}")
-    public ResponseEntity<StoreResponseDTO> read(@PathVariable("id") Long id){
-        return ResponseEntity.ok(storeService.read(id));
-    }
+    }             
 
-    @GetMapping 
-    public ResponseEntity<List<StoreResponseDTO>> findById(){
-        return ResponseEntity.ok(storeService.findAll());
-    }
-            
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/id/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") Long id){
         storeService.delete(id);
         return ResponseEntity.noContent().build();    
