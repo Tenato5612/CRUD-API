@@ -20,7 +20,7 @@ public class UserService {
     
     public UserResponseDTO create(UserCreateDTO dto){                      
         if(userRepository.existsByEmail(dto.getEmail())){
-            throw new RuntimeException("Email is registered");
+            throw new RuntimeException("ERROR> Email is registered");
         }
         UserEntity entity = dto.toEntity();             
         if(entity.getName().equals("") || entity.getName() == null
