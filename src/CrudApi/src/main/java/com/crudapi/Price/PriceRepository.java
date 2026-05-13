@@ -5,9 +5,6 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PriceRepository extends JpaRepository<PriceEntity, Long>{
-
-    public List<PriceEntity> findByProductOrderByCreateAtAsc(ProductEntity product);
-
-    public PriceEntity findTopByProductOrderByCreateAtDesc(ProductEntity product);
-    
+    public List<PriceEntity> findByProductOrderByCreatedAtAsc(ProductEntity product);
+    public PriceEntity findTopByProductOrderByCreatedAtDesc(ProductEntity product);    
 }

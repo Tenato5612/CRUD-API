@@ -1,6 +1,7 @@
 package com.crudapi.Price;
 
 import com.crudapi.Product.ProductEntity;
+import com.crudapi.Scrap.ScrapEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,22 +22,22 @@ public class PriceEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
         
-    @JoinColumn(name = "productId")
     @ManyToOne
-    private ProductEntity product;
-        
-    //@Column(nullable = false)
-    private Long scrapId;    
+    @JoinColumn(name = "product_Id", nullable = false)    
+    private ProductEntity product;        
+    @ManyToOne
+    @JoinColumn(name = "scrap_Id", nullable = false)    
+    private ScrapEntity scrap;    
         
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal price;       
     
     @Column(nullable = false)
-    private LocalDateTime createAt;        
+    private LocalDateTime createdAt;        
 
     @PrePersist
     public void prePersist(){
-        this.createAt = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now();
     }
 
     public Long getId() {
@@ -55,14 +56,14 @@ public class PriceEntity {
         this.product = product;
     }
 
-    public Long getScrapId() {
-        return scrapId;
+    public ScrapEntity getScrap() {
+        return scrap;
     }
 
-    public void setScrapId(Long scrapId) {
-        this.scrapId = scrapId;
+    public void setScrap(ScrapEntity scrap) {
+        this.scrap = scrap;
     }
-    
+
     public BigDecimal getPrice() {
         return price;
     }
@@ -71,11 +72,11 @@ public class PriceEntity {
         this.price = price;
     }
 
-    public LocalDateTime getCreateAt() {
-        return createAt;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreateAt(LocalDateTime createAt) {
-        this.createAt = createAt;
-    }        
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }    
 }

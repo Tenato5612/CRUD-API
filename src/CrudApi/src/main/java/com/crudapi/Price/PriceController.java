@@ -5,7 +5,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,9 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/price")
 @Tag(name = "price", description ="Endpoints to prices manager")
 public class PriceController {
-    
-    @Autowired
-    private PriceService priceService;    
+        
+    private final PriceService priceService;    
     
     public PriceController(PriceService priceService){
         this.priceService = priceService;
@@ -32,10 +30,10 @@ public class PriceController {
     @PostMapping
     public ResponseEntity<PriceResponseDTO> create(@RequestBody @Valid PriceCreateDTO dto){        
         return ResponseEntity.status(HttpStatus.CREATED).body(priceService.create(dto));
-    }
+    }  
     
     @GetMapping("/product/{id}/last")
-    public ResponseEntity<PriceResponseDTO> lastPrices(@PathVariable("id") Long id){        
+    public ResponseEntity<PriceResponseDTO> lastPrice(@PathVariable("id") Long id){        
         return ResponseEntity.ok(priceService.lastPriceByProduct(id));
     }    
     
@@ -44,7 +42,7 @@ public class PriceController {
         return ResponseEntity.ok(priceService.listPricesByProduct(id));
     }
     
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity<PriceResponseDTO> getPriceById(@PathVariable("id") Long id){
         return ResponseEntity.ok(priceService.getPriceById(id));
     }
