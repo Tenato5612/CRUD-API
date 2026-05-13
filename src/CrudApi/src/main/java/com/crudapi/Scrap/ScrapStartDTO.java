@@ -3,21 +3,19 @@ package com.crudapi.Scrap;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 
 public class ScrapStartDTO {
     
-    @NotNull(message = "Product ID cannot be null")
-    @Positive(message = "Product ID must be positive")
+    @NotNull(message = "ERROR> Product ID cannot be null")
     private Long productId;
     
     @Enumerated(EnumType.STRING)
-    private ScrapEntity status;
+    private String status;
     
     public ScrapCreateDTO toCreateDTO() {
         ScrapCreateDTO createDTO = new ScrapCreateDTO();
         createDTO.setProductId(this.productId);
-        createDTO.setStatus(ScrapEntity.Status.Pending);
+        createDTO.setStatus(ScrapEntity.Status.PENDING.name());
         createDTO.setPriceCollected(null); 
         return createDTO;
     }

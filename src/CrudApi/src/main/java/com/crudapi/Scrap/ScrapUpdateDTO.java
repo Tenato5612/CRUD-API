@@ -9,26 +9,10 @@ public class ScrapUpdateDTO {
     private Status status;
     private String errorMessage;
     
-    @Positive(message = "Price collected must be positive")
+    @Positive(message = "ERROR> Price collected must be positive")
     private BigDecimal priceCollected;
     
     private Boolean fineshed;
-    
-    public void toEntity(ScrapEntity entity){
-    
-        if(this.status != null){
-            entity.setStatus(this.status);            
-        }
-        if(this.errorMessage != null){
-            entity.setErrorMessage(this.errorMessage);
-        }
-        if(this.priceCollected != null){
-            entity.setPriceCollected(this.priceCollected);
-        }
-        if(Boolean.TRUE.equals(this.fineshed)){
-            entity.setFinishedAt(java.time.LocalDateTime.now());
-        }        
-    }
     
     public Status getStatus() {
         return status;

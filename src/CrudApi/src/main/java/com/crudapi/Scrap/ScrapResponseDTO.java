@@ -22,25 +22,21 @@ public class ScrapResponseDTO {
         this.errorMessage = entity.getErrorMessage();
         this.priceCollected = entity.getPriceCollected();
         this.startAt = entity.getStartAt();
-        this.finishedAt = entity.getFinishedAt();        
-    
-        if(entity.getStartAt() != null && entity.getFinishedAt() != null){
-            this.durationSeconds = java.time.Duration.between(
-                    entity.getStartAt(), 
-                    entity.getFinishedAt()
-            ).getSeconds();
-        }
-    
-        if(entity.getProduct() != null){
-            this.productId = entity.getProduct().getId();
-            this.productName = entity.getProduct().getName();
-        }
-    
-        if(entity.getProduct().getStore() != null){
-            this.storeName = entity.getProduct().getStore().getName();
-        }                                    
+        this.finishedAt = entity.getFinishedAt();  
+        this.durationSeconds = entity.getDurationSeconds();
+        
+        verifyProduct(entity);
     }
 
+    public void verifyProduct(ScrapEntity entity){
+            if(entity.getProduct() != null){
+            this.productId = entity.getProduct().getId();
+            this.productName = entity.getProduct().getName();
+            this.storeName = entity.getProduct().getStore().getName();
+        }
+    }
+    
+    
     public ScrapResponseDTO(){
         
     }

@@ -7,27 +7,18 @@ import java.math.BigDecimal;
 
 public class ScrapCreateDTO {
 
-    @NotNull(message = "Product Id cannot be null")
-    @Positive(message = "Product Id must be positive")
+    @NotNull(message = "ERROR> Product Id cannot be null")    
     private Long productId;
     
-    @NotNull(message = "Status cannot be null")
-    private Status status;
+    @NotNull(message = "ERROR> Status cannot be null")
+    private String status;
     
-    @Positive(message = "Price collected must be positive")
+    @Positive(message = "ERROR> Price collected must be positive")
     private BigDecimal priceCollected;
+    
     private String errorMessage;
     
-    public ScrapEntity toEntity(){
-        ScrapEntity entity = new ScrapEntity();    
-        entity.setStatus(this.status);
-        entity.setPriceCollected(this.priceCollected);
-        
-        if(this.errorMessage != null){
-            entity.setErrorMessage(this.errorMessage);
-        }        
-        return entity;
-    }
+    public ScrapCreateDTO(){}    
 
     public Long getProductId() {
         return productId;
@@ -37,11 +28,11 @@ public class ScrapCreateDTO {
         this.productId = productId;
     }
 
-    public Status getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Status status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 

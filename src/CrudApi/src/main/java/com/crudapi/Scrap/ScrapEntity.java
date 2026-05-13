@@ -1,5 +1,6 @@
 package com.crudapi.Scrap;
 
+import com.crudapi.Price.PriceEntity;
 import com.crudapi.Product.ProductEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,17 +11,19 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "scrap")
 public class ScrapEntity {
 
     public enum Status{
-        Pending, Success, Running, Failed
+        PENDING, SUCCESS, RUNNING, FAILED
     }
     
     @Id
@@ -30,6 +33,9 @@ public class ScrapEntity {
     @ManyToOne
     @JoinColumn(name = "product_id")
     private ProductEntity product;
+    
+    @OneToMany(mappedBy = "scrap")
+    private List<PriceEntity> price;
     
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -44,6 +50,9 @@ public class ScrapEntity {
     private LocalDateTime startAt;
     
     private LocalDateTime finishedAt;
+    
+    @Column(name = "duration")
+    private Long durationSeconds;
         
     @PrePersist
     public void prepersist(){
@@ -106,5 +115,19 @@ public class ScrapEntity {
         this.finishedAt = finishedAt;
     }
 
-    
+    public List<PriceEntity> getPrice() {
+        return price;
+    }
+
+    public void setPrice(List<PriceEntity> price) {
+        this.price = price;
+    }      
+
+    public Long getDurationSeconds() {
+        return durationSeconds;
+    }
+
+    public void setDurationSeconds(Long durationSeconds) {
+        this.durationSeconds = durationSeconds;
+    }  
 }

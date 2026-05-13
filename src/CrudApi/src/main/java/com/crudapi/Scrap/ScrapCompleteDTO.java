@@ -6,10 +6,10 @@ import java.math.BigDecimal;
 
 public class ScrapCompleteDTO {
     
-    @NotNull(message = "Status cannot be null")
-    private ScrapEntity.Status status; // SUCCESS ou FAILED
+    @NotNull(message = "ERROR> Status cannot be null")
+    private ScrapEntity.Status status;
     
-    @Positive(message = "Price collected must be positive")
+    @Positive(message = "ERROR> Price collected must be positive")
     private BigDecimal priceCollected;
     
     private String errorMessage;
@@ -19,7 +19,7 @@ public class ScrapCompleteDTO {
         dto.setStatus(this.status);        
         dto.setPriceCollected(this.priceCollected);
         dto.setErrorMessage(this.errorMessage);
-        dto.setFineshed(Boolean.TRUE); // marca como finalizado        
+        dto.setFineshed(Boolean.TRUE);     
         return dto;
     }
     
