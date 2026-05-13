@@ -1,6 +1,6 @@
 package com.crudapi.Product;
 
-import com.crudapi.Entity.UserProductEntity;
+import com.crudapi.UserProduct.UserProductEntity;
 import com.crudapi.Store.StoreEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -29,7 +29,7 @@ public class ProductEntity {
     }        
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     
     @ManyToOne
@@ -54,18 +54,17 @@ public class ProductEntity {
     
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Category category;   
-    
+    private Category category;       
     @Column(nullable = false)    
     @Enumerated(EnumType.STRING)
     private Status status;
     
     @Column(nullable = false)
-    private LocalDateTime createAt;             
+    private LocalDateTime createdAt;             
 
     @PrePersist
     public void prePersist(){
-        this.createAt = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now();
     }
     
     public Status updateStatus(){
@@ -100,7 +99,7 @@ public class ProductEntity {
     public void setUserProduct(UserProductEntity userProduct) {
         this.userProduct = userProduct;
     }
-
+    
     public String getName() {
         return name;
     }
@@ -139,15 +138,15 @@ public class ProductEntity {
 
     public void setStatus(Status status) {
         this.status = status;
-    }  
+    }          
 
-    public LocalDateTime getCreateAt() {
-        return createAt;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreateAt(LocalDateTime createAt) {
-        this.createAt = createAt;
-    }           
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
 
     public Category getCategory() {
         return category;

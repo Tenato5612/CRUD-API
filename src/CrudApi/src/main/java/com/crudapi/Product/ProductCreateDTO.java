@@ -1,60 +1,34 @@
 package com.crudapi.Product;
 
 import com.crudapi.Product.ProductEntity.Category;
-import com.crudapi.Product.ProductResponseDTO.Status;
-import com.crudapi.Store.StoreEntity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
 import org.hibernate.validator.constraints.URL;
 
 public class ProductCreateDTO {           
-    @NotBlank(message = "Cannot Name be null or blank")
+    @NotBlank(message = "ERROR> Cannot Name be null or blank")
     private String name;
     
-    @NotBlank(message = "Cannot URL be null or blank")
+    @NotBlank(message = "ERROR> Cannot URL be null or blank")
     @URL
     private String productUrl;
-    
-    @NotNull(message = "Cannot storeId be null ")
-    private StoreEntity store;
         
-    @Positive(message = "Price collected must be positive")
+    private Long storeId;
+    
+    @Positive(message = "ERROR> Value must be greater than zero")
     private BigDecimal price;        
     
     @Enumerated(EnumType.STRING)
-    private Category category;       
-        
-    private Status status;
+    private ProductEntity.Category category;
+    @Enumerated(EnumType.STRING)
+    private ProductEntity.Status status;
     
     private String img;    
         
-    public ProductEntity toEntity(){        
-        ProductEntity entity = new ProductEntity();           
-        entity.setName(this.name);
-        entity.setProductUrl(this.productUrl);
-        entity.setPrice(this.price);        
-        entity.setImg(this.img);                
-        entity.setCategory(this.category);    
-        entity.setStore(this.store);
-        if(price != null && price.compareTo(BigDecimal.ZERO) > 0){
-            entity.setStatus(ProductEntity.Status.Active);
-         }else{
-            entity.setStatus(ProductEntity.Status.Disable);
-        }                
-        return entity;
-    }
-
-    public StoreEntity getStore() {
-        return store;
-    }
-
-    public void setStore(StoreEntity store) {
-        this.store = store;
-    }
+    public ProductCreateDTO(){}
 
     public String getName() {
         return name;
@@ -94,14 +68,21 @@ public class ProductCreateDTO {
 
     public void setCategory(Category category) {
         this.category = category;
-    }    
+    }   
 
-    public Status getStatus() {
+    public Long getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(Long storeId) {
+        this.storeId = storeId;
+    }
+
+    public ProductEntity.Status getStatus() {
         return status;
     }
 
-    public void setStatus(Status status) {
+    public void setStatus(ProductEntity.Status status) {
         this.status = status;
-    }
-    
+    }    
 }

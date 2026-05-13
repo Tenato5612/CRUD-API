@@ -1,9 +1,5 @@
 package com.crudapi.Product;
 
-import com.crudapi.Product.ProductCreateDTO;
-import com.crudapi.Product.ProductResponseDTO;
-import com.crudapi.Product.ProductUpdateDTO;
-import com.crudapi.Product.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,32 +28,27 @@ public class ProductController {
     @Operation(summary = "Register new Product")
     @ApiResponse(responseCode = "201")
     @PostMapping
-    public ResponseEntity<ProductResponseDTO> create(@RequestBody ProductCreateDTO dto){
-        ProductResponseDTO responseDTO = productService.create(dto);        
-        if(responseDTO.getProductUrl().equals("") || responseDTO.getProductUrl() == null){                        
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseDTO);                
-        } else{
-            return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
-        }        
+    public ResponseEntity<ProductResponseDTO> create(@RequestBody ProductCreateDTO dto){        
+        return ResponseEntity.status(HttpStatus.CREATED).body(productService.create(dto));        
     }
     
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<ProductResponseDTO> update(@PathVariable("id") Long id, @RequestBody @Valid ProductUpdateDTO dto){        
         return ResponseEntity.ok(productService.update(id, dto));
     }
     
-    @GetMapping("/{id}")
+    @GetMapping("/read/{id}")
     public ResponseEntity<ProductResponseDTO> read(@PathVariable("id") Long id){
         ProductResponseDTO responseDTO = productService.read(id);
         return ResponseEntity.ok(responseDTO);
     }
     
-    @GetMapping
+    @GetMapping("/read")
     public ResponseEntity<List<ProductResponseDTO>> findAll(){
         return ResponseEntity.ok(productService.findAll());
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") Long id){       
         productService.delete(id);
         return ResponseEntity.noContent().build();
