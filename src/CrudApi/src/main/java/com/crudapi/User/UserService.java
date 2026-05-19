@@ -1,70 +1,82 @@
 package com.crudapi.User;
 
-import com.crudapi.User.UserEntity;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class UserService {    
+public class UserService {        
+            
     @Autowired
-    final UserRepository userRepository;
-    
-    @Autowired 
     private PasswordEncoder passwordEncoder;       
     
+    private final UserRepository userRepository;    
     public UserService(UserRepository userRepository){
         this.userRepository = userRepository;
     }
     
-    public UserResponseDTO create(UserCreateDTO dto){                      
+    //Create User
+    @Transactional
+    public UserResponseDTO create(UserCreateDTO dto){                                     
+        validateCreate(dto);
+        UserEntity entity = new UserEntity();
+        entity.setName(dto.getName());
+        entity.setEmail(dto.getEmail());
+        entity.setPassword(passwordEncoder.encode(dto.getPassword()));
+        entity.setStatus(UserEntity.Status.DISCONNECT);
+        userRepository.save(entity);
+        return new UserResponseDTO(entity);
+    } 
+    
+    // Method be verificate possible errors in user create
+    private void validateCreate(UserCreateDTO dto){    
         if(userRepository.existsByEmail(dto.getEmail())){
             throw new RuntimeException("ERROR> Email is registered");
-        }
-        UserEntity entity = dto.toEntity();             
-        if(entity.getName().equals("") || entity.getName() == null
-                || entity.getEmail().equals("") || entity.getEmail() == null
-                || entity.getPassword().equals("") || entity.getPassword() == null)
-        {                
-            return null;            
-        } else{
-            entity.setPassword(passwordEncoder.encode(dto.getPassword()));        
-            userRepository.save(entity);      
-            return new UserResponseDTO(entity);    
-        }
-    
-    }    
-    
-    public UserResponseDTO update(long id, UserUpdateDTO dto){             
+        }                   
+    }
+           
+    // Make a update with this parameter, Name and Status
+    @Transactional
+    public UserResponseDTO update(Long id, UserUpdateDTO dto){             
         UserEntity entity = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new RuntimeException("ERROR> User not found with id: " + id));
         if(dto.getName() != null){entity.setName(dto.getName());}
-        if(dto.getName() != null){entity.setEmail(dto.getEmail());}                      
+        if(dto.getStatus()!= null){entity.setStatus(dto.getStatus());}        
         userRepository.save(entity);        
         return new UserResponseDTO(entity);
     }
-            
-    public UserResponseDTO read(long id){                         
-        UserEntity user = userRepository.findById(id).orElseThrow(() -> new 
-            RuntimeException("User not found"));        
-        return new UserResponseDTO(user);
+    
+    private static final Logger log = LoggerFactory.getLogger(UserService.class);
+    // Show all user in DB
+    public Page<UserResponseDTO> allUser(Pageable pageable){
+        Page<UserResponseDTO> listUsers = userRepository.findAllProject(pageable);
+        listUsers.getContent().forEach(project -> {
+            log.debug("Id: {}, Name: {}, Email: {}, Status: {}", 
+                    project.getId(),
+                    project.getName(),
+                    project.getEmail(),
+                    project.getStatus());
+        });
+        return listUsers;
     }
     
-    public UserResponseDTO findById(long id, UserResponseDTO dto){
-        UserEntity entity = new UserEntity();    
-        if(dto.getName() != null){entity.setName(dto.getName());}
-        if(dto.getName() != null){entity.setEmail(dto.getEmail());}    
-        if(dto.getCreateAt() != null){entity.setCreateAt(dto.getCreateAt());}
-        userRepository.save(entity);
+    // Filter so read infos of user using parameter, id
+    public UserResponseDTO findUserById(Long id){
+        UserEntity entity = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("ERROR> User not found with id: " + id));                               
         return new UserResponseDTO(entity);
     }
-
-    public List<UserResponseDTO> findAll(){
-        return userRepository.findAll().stream().map(UserResponseDTO::new).toList();
-    }
     
+    // Delete user using id
     public void deleteUser(Long id){
+        UserEntity entity = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("ERROR> User not found with id: " + id));
         userRepository.deleteById(id);
     }       
 }

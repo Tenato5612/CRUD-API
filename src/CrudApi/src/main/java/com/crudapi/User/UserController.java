@@ -1,12 +1,12 @@
 package com.crudapi.User;
 
-import com.crudapi.User.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,10 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/users")
-@Tag(name = "users", description = "Endpoints para gerenciamento de usuários e verificação")
+@Tag(name = "users", description = "Endpoints to manegement and verification of users")
 public class UserController {
-    
-    @Autowired    
+       
     final UserService userService;
 
     public UserController(UserService userService){
@@ -30,36 +29,28 @@ public class UserController {
     }
             
     @Operation(summary = "Register new User")
-    @ApiResponse(responseCode = "201")    
+    @ApiResponse(responseCode = "200")    
     @PostMapping
-    public ResponseEntity<UserResponseDTO> create(@RequestBody UserCreateDTO dto){
-        UserResponseDTO responseDTO = userService.create(dto);
-        if(responseDTO.getName().equals("") || responseDTO.getName() == null 
-                || responseDTO.getEmail().equals("") || responseDTO.getEmail() == null){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseDTO);
-        } else{
-            return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
-        }        
+    public ResponseEntity<UserResponseDTO> create(@RequestBody @Valid UserCreateDTO dto){
+        return ResponseEntity.ok(userService.create(dto));                
     }    
     
-    @PutMapping("/{id}")
-    public ResponseEntity<UserResponseDTO> update(@PathVariable Long id, @RequestBody UserUpdateDTO dto){
-        UserResponseDTO responseDTO = userService.update(id, dto);
-        return ResponseEntity.ok(responseDTO);
+    @PutMapping("/id/{id}")
+    public ResponseEntity<UserResponseDTO> update(@PathVariable Long id, @RequestBody @Valid UserUpdateDTO dto){        
+        return ResponseEntity.ok(userService.update(id, dto));
     }      
     
-    @GetMapping("/{id}")
-    public ResponseEntity<UserResponseDTO> read(@PathVariable("id") long id){
-        UserResponseDTO responseDTO = userService.read(id);
-        return ResponseEntity.ok(responseDTO);
+    @GetMapping("/allUser")
+    public ResponseEntity<Page<UserResponseDTO>> allUser(@PageableDefault(size = 50) Pageable pageable){        
+        return ResponseEntity.ok(userService.allUser(pageable));
     }
     
-    @GetMapping
-    public ResponseEntity<List<UserResponseDTO>> findById(){
-        return ResponseEntity.ok(userService.findAll());
+    @GetMapping("/id/{id}")
+    public ResponseEntity<UserResponseDTO> findUserById(@PathVariable("id") Long id){
+        return ResponseEntity.ok(userService.findUserById(id));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/id/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") Long id){       
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();

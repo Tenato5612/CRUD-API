@@ -1,6 +1,5 @@
 package com.crudapi.User;
 
-import com.crudapi.Entity.UserProductEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -8,27 +7,22 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Table(name = "users")
 public class UserEntity {
     
     public enum Status{
-        Active, Inactive, Disconect
+        ACTIVE, INACTIVE, DISCONNECT 
     }     
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    @ManyToOne
-    @JoinColumn(name = "userProduct_id")
-    private UserProductEntity userProduct;
     
     @Column(nullable = false)
     private String name;
@@ -36,21 +30,43 @@ public class UserEntity {
     @Column(nullable = false, unique = true)
     private String email;
      
-    @Column(nullable = false)
+    @Column(nullable = false)    
     private String password;   
     
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)    
     private Status status;
       
-    @Column(nullable = false)
-    private LocalDateTime createAt;
-   
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
     @PrePersist
-    public void prePersist(){
-        this.createAt = LocalDateTime.now();
+    private void prePersist(){
+        this.createdAt = LocalDateTime.now();
+    }
+           
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 71 * hash + Objects.hashCode(this.id);
+        return hash;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final UserEntity other = (UserEntity) obj;
+        return Objects.equals(this.id, other.id);
+    }
+    
     public Long getId() {
         return id;
     }
@@ -58,15 +74,7 @@ public class UserEntity {
     public void setId(Long id) {
         this.id = id;
     }
-
-    public UserProductEntity getUserProduct() {
-        return userProduct;
-    }
-
-    public void setUserProduct(UserProductEntity userProduct) {
-        this.userProduct = userProduct;
-    }      
-
+    
     public String getName() {
         return name;
     }
@@ -99,11 +107,11 @@ public class UserEntity {
         this.status = status;
     }
 
-    public LocalDateTime getCreateAt() {
-        return createAt;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreateAt(LocalDateTime createAt) {
-        this.createAt = createAt;
-    }         
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }  
 }
