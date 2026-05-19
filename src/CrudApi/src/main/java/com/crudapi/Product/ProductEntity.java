@@ -1,6 +1,5 @@
 package com.crudapi.Product;
 
-import com.crudapi.UserProduct.UserProductEntity;
 import com.crudapi.Store.StoreEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -19,61 +18,48 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "product")
 public class ProductEntity {
-        
     public enum Status{
-        Active, Disable
+        ACTIVE, DISABLE
     }
     
     public enum Category{
-        Default, Eletronic, Clothes, Toys, Food
+        DEFAULT, ELETRONIC, CLOTHES, TOYS, FOOD
     }        
     
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
     @ManyToOne
     @JoinColumn(name = "store_id")
     private StoreEntity store;
-
-    @ManyToOne    
-    @JoinColumn(name = "userProduct_id")
-    private UserProductEntity userProduct;    
     
     @Column(nullable = false)
     private String name;
-        
-    @Column(nullable = false)
+    
+    @Column(nullable = false, length = 2048)
     private String productUrl;
     
-    @Column(nullable = false, precision = 10, scale = 2)    
-    private BigDecimal price;    
-    
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String img;
+    
+    @Column(nullable = false, precision = 10, scale = 2)    
+    private BigDecimal price;          
     
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Category category;       
+    
     @Column(nullable = false)    
     @Enumerated(EnumType.STRING)
     private Status status;
     
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;             
 
     @PrePersist
-    public void prePersist(){
+    private void prePersist(){
         this.createdAt = LocalDateTime.now();
-    }
-    
-    public Status updateStatus(){
-        if(price != null && price.compareTo(BigDecimal.ZERO) > 0){
-            setStatus(Status.Active);
-        } else{
-            setStatus(Status.Disable);
-        }   
-        return getStatus();
     }
     
     public Long getId() {
@@ -90,14 +76,6 @@ public class ProductEntity {
 
     public void setStore(StoreEntity store) {
         this.store = store;
-    }
-
-    public UserProductEntity getUserProduct() {
-        return userProduct;
-    }
-
-    public void setUserProduct(UserProductEntity userProduct) {
-        this.userProduct = userProduct;
     }
     
     public String getName() {

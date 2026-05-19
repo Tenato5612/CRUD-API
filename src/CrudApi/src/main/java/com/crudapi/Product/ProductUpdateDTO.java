@@ -1,16 +1,12 @@
 package com.crudapi.Product;
 
 import com.crudapi.Product.ProductEntity.Category;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import java.math.BigDecimal;
 
 public class ProductUpdateDTO {
     private String name;
-    private String productUrl;
-    private BigDecimal price;
+    private String productUrl;    
     private String img;             
-    @Enumerated(EnumType.STRING)
     private Category category;        
     
     public ProductUpdateDTO(){}
@@ -29,14 +25,6 @@ public class ProductUpdateDTO {
 
     public void setProductUrl(String productUrl) {
         this.productUrl = productUrl;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
     }
     
     public String getImg() {

@@ -1,32 +1,22 @@
 package com.crudapi.Product;
 
 import com.crudapi.Product.ProductEntity.Category;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import org.hibernate.validator.constraints.URL;
 
 public class ProductCreateDTO {           
+
     @NotBlank(message = "ERROR> Cannot Name be null or blank")
-    private String name;
-    
+    private String name;    
     @NotBlank(message = "ERROR> Cannot URL be null or blank")
     @URL
-    private String productUrl;
-        
-    private Long storeId;
-    
-    @Positive(message = "ERROR> Value must be greater than zero")
-    private BigDecimal price;        
-    
-    @Enumerated(EnumType.STRING)
-    private ProductEntity.Category category;
-    @Enumerated(EnumType.STRING)
-    private ProductEntity.Status status;
-    
+    private String productUrl;            
     private String img;    
+    @NotNull(message = "ERROR> Cannot prices be null")    
+    private BigDecimal price;        
+    private ProductEntity.Category category;    
         
     public ProductCreateDTO(){}
 
@@ -69,20 +59,4 @@ public class ProductCreateDTO {
     public void setCategory(Category category) {
         this.category = category;
     }   
-
-    public Long getStoreId() {
-        return storeId;
-    }
-
-    public void setStoreId(Long storeId) {
-        this.storeId = storeId;
-    }
-
-    public ProductEntity.Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(ProductEntity.Status status) {
-        this.status = status;
-    }    
 }

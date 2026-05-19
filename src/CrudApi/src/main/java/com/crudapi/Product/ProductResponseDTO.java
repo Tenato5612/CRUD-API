@@ -1,7 +1,6 @@
 package com.crudapi.Product;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -11,8 +10,9 @@ public class ProductResponseDTO {
     private String productUrl;
     private String img;
     private String status;   
-    private String category;            
-    private BigDecimal price;            
+    private String category;  
+    private String storeName;
+    private BigDecimal price; 
     private LocalDateTime createdAt;
     
     public ProductResponseDTO (ProductEntity entity){   
@@ -20,27 +20,12 @@ public class ProductResponseDTO {
         this.name = entity.getName();
         this.productUrl = entity.getProductUrl();
         this.price = entity.getPrice();      
-        cents();
-        this.img = entity.getImg();
-        entity.setStatus(ProductEntity.Status.Active);
-        haveProduct();        
-        this.createdAt = entity.getCreatedAt();           
+        this.status = entity.getStatus().name();        
+        this.img = entity.getImg();        
+        this.createdAt = entity.getCreatedAt();         
+        this.storeName = entity.getStore().getName();
         this.category = entity.getCategory().name();
-    }
-        
-    public void haveProduct(){
-        if(price != null && price.compareTo(BigDecimal.ZERO) > 0){
-            this.status = ProductEntity.Status.Active.name();
-        } else{
-            this.status = ProductEntity.Status.Disable.name();
-        }                            
-    }
-    
-    public BigDecimal cents(){
-        BigDecimal priceFormat = this.price.setScale(2, RoundingMode.HALF_UP);        
-        return priceFormat;
-        
-    }
+    }   
 
     public Long getId() {
         return id;
@@ -104,6 +89,14 @@ public class ProductResponseDTO {
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }  
+
+    public String getStoreName() {
+        return storeName;
+    }
+
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
+    }
     
     @Override
     public boolean equals(Object obj) {
